@@ -1,5 +1,6 @@
 import React from "react";
 import { Flex, Heading, Text, Divider, Button } from "@chakra-ui/core";
+import { Link } from "react-router-dom";
 
 import { BaseContainer, Brand } from "../components";
 import Carousel from "react-elastic-carousel";
@@ -35,33 +36,37 @@ function Home() {
           E-COM DESIGN and 850+ brands
         </Text>
         <Flex flexDir={{ base: "column", sm: "row" }}>
-          <Button
-            px={{ base: "5", sm: "10" }}
-            lineHeight='none'
-            backgroundColor='white'
-            color='black'
-            size='lg'
-            height={{ base: "2rem", sm: "3rem" }}
-            mx='3'
-            fontSize={{ base: "md", sm: "lg" }}
-            _hover={{ color: "white", background: "black" }}
-          >
-            Shop Men
-          </Button>
-          <Button
-            px={{ base: "5", sm: "10" }}
-            lineHeight='none'
-            backgroundColor='white'
-            size='lg'
-            color='black'
-            mx='3'
-            height={{ base: "2rem", sm: "3rem" }}
-            mt={{ base: "3", sm: 0 }}
-            fontSize={{ base: "md", sm: "lg" }}
-            _hover={{ color: "white", background: "black" }}
-          >
-            Shop Women
-          </Button>
+          <Link to='/men'>
+            <Button
+              px={{ base: "5", sm: "10" }}
+              lineHeight='none'
+              backgroundColor='white'
+              color='black'
+              size='lg'
+              height={{ base: "2rem", sm: "3rem" }}
+              mx='3'
+              fontSize={{ base: "md", sm: "lg" }}
+              _hover={{ color: "white", background: "black" }}
+            >
+              Shop Men
+            </Button>{" "}
+          </Link>
+          <Link to='/women'>
+            <Button
+              px={{ base: "5", sm: "10" }}
+              lineHeight='none'
+              backgroundColor='white'
+              size='lg'
+              color='black'
+              mx='3'
+              height={{ base: "2rem", sm: "3rem" }}
+              mt={{ base: "3", sm: 0 }}
+              fontSize={{ base: "md", sm: "lg" }}
+              _hover={{ color: "white", background: "black" }}
+            >
+              Shop Women
+            </Button>
+          </Link>
         </Flex>
       </BaseContainer>
 

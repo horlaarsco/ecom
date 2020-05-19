@@ -31,10 +31,20 @@ export default function Login() {
       index={tabIndex}
     >
       <TabList>
-        <Tab onClick={() => setTabIndex(0)} _focus={{ outline: 0 }}>
+        <Tab
+          px={{ base: 1, sm: 4 }}
+          fontSize={{ base: "xs", sm: "md", md: "lg" }}
+          onClick={() => setTabIndex(0)}
+          _focus={{ outline: 0 }}
+        >
           NEW TO E-COM?
         </Tab>
-        <Tab onClick={() => setTabIndex(1)} _focus={{ outline: 0 }}>
+        <Tab
+          px={{ base: 1, sm: 4 }}
+          fontSize={{ base: "xs", sm: "md", md: "lg" }}
+          onClick={() => setTabIndex(1)}
+          _focus={{ outline: 0 }}
+        >
           ALREADY REGISTERED?
         </Tab>
       </TabList>
@@ -47,11 +57,21 @@ export default function Login() {
         my='4'
       >
         <TabPanel w='full'>
-          <Heading fontSize='lg' my='6' textAlign='center'>
+          <Heading
+            fontSize={{ base: "sm", sm: "lg" }}
+            my='6'
+            textAlign='center'
+          >
             SIGN UP USING YOUR EMAIL ADDRESS
           </Heading>
           <FormControl w='full'>
-            <FormLabel letterSpacing='widest' my='2' htmlFor='email'>
+            <FormLabel
+              fontSize={{ base: "sm", sm: "lg" }}
+              letterSpacing='widest'
+              my='2'
+              mb={{ base: 0, sm: 2 }}
+              htmlFor='email'
+            >
               Email address
             </FormLabel>
             <Input
@@ -61,25 +81,61 @@ export default function Login() {
             />
           </FormControl>
           <FormControl w='full'>
-            <FormLabel letterSpacing='widest' my='2' htmlFor='fname'>
+            <FormLabel
+              fontSize={{ base: "sm", sm: "lg" }}
+              letterSpacing='widest'
+              my='2'
+              htmlFor='username'
+              mb={{ base: 0, sm: 2 }}
+            >
+              Username
+            </FormLabel>
+            <Input id='username' />
+          </FormControl>
+          <FormControl w='full'>
+            <FormLabel
+              fontSize={{ base: "sm", sm: "lg" }}
+              letterSpacing='widest'
+              my='2'
+              mb={{ base: 0, sm: 2 }}
+              htmlFor='fname'
+            >
               First Name
             </FormLabel>
             <Input id='fname' />
           </FormControl>
           <FormControl w='full'>
-            <FormLabel letterSpacing='widest' my='2' htmlFor='lname'>
+            <FormLabel
+              fontSize={{ base: "sm", sm: "lg" }}
+              letterSpacing='widest'
+              my='2'
+              mb={{ base: 0, sm: 2 }}
+              htmlFor='lname'
+            >
               Last Name
             </FormLabel>
             <Input id='lname' />
           </FormControl>
-          <FormControl w='full' my='4'>
-            <FormLabel letterSpacing='widest' my='2' htmlFor='password'>
+          <FormControl w='full'>
+            <FormLabel
+              fontSize={{ base: "sm", sm: "lg" }}
+              letterSpacing='widest'
+              my='2'
+              mb={{ base: 0, sm: 2 }}
+              htmlFor='password'
+            >
               Password
             </FormLabel>
             <Input type='password' id='password' />
           </FormControl>
-          <FormControl w='full' my='4'>
-            <FormLabel letterSpacing='widest' my='2' htmlFor='cpassword'>
+          <FormControl w='full'>
+            <FormLabel
+              fontSize={{ base: "sm", sm: "lg" }}
+              letterSpacing='widest'
+              my='2'
+              mb={{ base: 0, sm: 2 }}
+              htmlFor='cpassword'
+            >
               Confirm Password
             </FormLabel>
             <Input type='password' id='cpassword' />
@@ -96,16 +152,26 @@ export default function Login() {
           </Button>
           <Box my='5' textAlign='center'>
             <Link color='#303133' onClick={() => setTabIndex(1)}>
-              Already have and account?
+              Already have an account?
             </Link>
           </Box>
         </TabPanel>
         <TabPanel w='full'>
-          <Heading fontSize='lg' my='6' textAlign='center'>
+          <Heading
+            fontSize={{ base: "sm", sm: "lg" }}
+            my='6'
+            textAlign='center'
+          >
             SIGN IN WITH EMAIL
           </Heading>
           <FormControl w='full'>
-            <FormLabel letterSpacing='widest' my='2' htmlFor='email'>
+            <FormLabel
+              fontSize={{ base: "sm", sm: "lg" }}
+              letterSpacing='widest'
+              mb={{ base: 0, sm: 2 }}
+              my='2'
+              htmlFor='email'
+            >
               Email address
             </FormLabel>
             <Input
@@ -115,7 +181,13 @@ export default function Login() {
             />
           </FormControl>
           <FormControl w='full' my='4'>
-            <FormLabel letterSpacing='widest' my='2' htmlFor='password'>
+            <FormLabel
+              fontSize={{ base: "sm", sm: "lg" }}
+              letterSpacing='widest'
+              my='2'
+              mb={{ base: 0, sm: 2 }}
+              htmlFor='password'
+            >
               Password
             </FormLabel>
             <Input
