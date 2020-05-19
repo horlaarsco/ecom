@@ -1,30 +1,43 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import { BaseContainer, ProductCard } from "../components";
-import { SimpleGrid, Heading, Text, Box, Button, Flex } from "@chakra-ui/core";
+import {
+  SimpleGrid,
+  Heading,
+  Text,
+  Box,
+  Image,
+  Button,
+  Flex,
+} from "@chakra-ui/core";
 
 // @ts-ignore
-export default function Gender(props) {
-  const { gender } = props;
+export default function Brand() {
+  let { brand } = useParams();
+
   return (
     <>
-      <Box
-        bg='#f5f5f5'
-        color='black'
-        p={{ base: 3, lg: 10 }}
-        textAlign='center'
-      >
+      <Box bg='#f5f5f5' color='black' p={{ base: 3, lg: 8 }}>
         <BaseContainer>
-          <Heading mb='6'>{`${gender}'s Fashion`}</Heading>
-          <Text lineHeight='taller' fontSize='sm' mx={{ base: 0, xl: 24 }}>
-            You’ve nailed your outfit, now all that’s left is the footwear –
-            which is where our edit of shoes for women comes in. Whether you're
-            looking for everyday winners or something for your next night out,
-            give your feet the VIP treatment, whatever your style. Refresh your
-            summer wardrobe with ASOS DESIGN's selection of sandals, from
-            sliders to platforms, and get holiday ready with River Island’s
-            strappy wedges. Looking for women's trainers? Classic designs from
-            Vans will add a street-style edge to any outfit.
-          </Text>
+          <Flex
+            direction={{ base: "column", md: "row" }}
+            align={{ base: "flex-start", md: "flex-end" }}
+          >
+            <Image
+              h='100px'
+              mr='6'
+              mb={{ base: 6, md: 0 }}
+              src='https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTNoD9oT_VnEYNKKeOor8U4qK5T1LF4bC2iRDD75fQdveQMHTUA'
+            />
+            <Box>
+              <Heading fontSize='lg'>{`${brand}'s Fashion`}</Heading>
+              <Text lineHeight='taller' fontSize='sm'>
+                You’ve nailed your outfit, now all that’s left is the footwear –
+                which is where our edit of shoes for women comes in. Whether
+                you're lo Vans will add a street-style edge to any outfit.
+              </Text>
+            </Box>
+          </Flex>
         </BaseContainer>
       </Box>
       <BaseContainer mt='6'>

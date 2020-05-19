@@ -6,15 +6,13 @@ import {
   Divider,
   Text,
   Image,
-  Select,
   Button,
-  IconButton,
   FormControl,
   FormLabel,
   Input,
 } from "@chakra-ui/core";
 
-import { BaseContainer, CartItem } from "../components";
+import { BaseContainer } from "../components";
 
 export default function Checkout() {
   return (

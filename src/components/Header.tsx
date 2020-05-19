@@ -83,7 +83,9 @@ export default function Header() {
               mx={{ base: 3, sm: "5" }}
               as={MdFavoriteBorder}
             />
+
             <Flex
+              d={{ base: "none", md: "block" }}
               onMouseEnter={changeCartVisiblity}
               onMouseLeave={changeCartVisiblity}
               pos='relative'
@@ -152,6 +154,15 @@ export default function Header() {
                 </Flex>
               </Box>
             </Flex>
+            <Link to='/cart'>
+              <Box
+                d={{ base: "block", md: "none" }}
+                size={{ base: "20px", sm: "30px" }}
+                color='white'
+                as={FiShoppingCart}
+                cursor='pointer'
+              />
+            </Link>
           </Flex>
         </Flex>
       </BaseContainer>

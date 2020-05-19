@@ -6,9 +6,7 @@ import {
   Divider,
   Text,
   Image,
-  Select,
   Button,
-  IconButton,
 } from "@chakra-ui/core";
 import { BaseContainer, CartItem } from "../components";
 import { Link } from "react-router-dom";
