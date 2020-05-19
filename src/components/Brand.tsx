@@ -10,7 +10,7 @@ export default function Brand() {
         src='https://content.asos-media.com/-/media/homepages/ww/2020/05/11/ww_summerfaceandbody_moment.jpg'
       />
       <Text
-        fontWeight='bold'
+        fontWeight='300'
         mt='3'
         fontSize='lg'
         color='black'
