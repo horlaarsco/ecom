@@ -1,8 +1,9 @@
 import React from "react";
-import { Flex, Heading, Box, Link, Divider } from "@chakra-ui/core";
+import { Flex, Heading, Box, Divider } from "@chakra-ui/core";
 import { BsPerson } from "react-icons/bs";
 import { MdFavoriteBorder } from "react-icons/md";
 import { FiShoppingCart } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 import BaseContainer from "./BaseContainer";
 
@@ -12,9 +13,11 @@ export default function Header() {
       <BaseContainer py='0' px={{ base: 3, lg: 6, xl: 10 }} color='white'>
         <Flex justify='space-between'>
           <Flex align='center'>
-            <Heading py='2' letterSpacing='widest'>
-              E-COM
-            </Heading>
+            <Link to='/'>
+              <Heading py='2' letterSpacing='widest'>
+                E-COM
+              </Heading>
+            </Link>
             <Divider
               d={{ base: "none", md: "inline" }}
               mx='8'
@@ -44,11 +47,14 @@ export default function Header() {
             />
           </Flex>
           <Flex align='center'>
-            <Box
-              size={{ base: "20px", sm: "30px" }}
-              color='white'
-              as={BsPerson}
-            />
+            <Link to='/auth'>
+              <Box
+                size={{ base: "20px", sm: "30px" }}
+                color='white'
+                as={BsPerson}
+              />
+            </Link>
+
             <Box
               size={{ base: "20px", sm: "30px" }}
               color='white'

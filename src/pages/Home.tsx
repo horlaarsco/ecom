@@ -1,20 +1,6 @@
 import React from "react";
-import {
-  Flex,
-  Heading,
-  Text,
-  Divider,
-  Button,
-  SimpleGrid,
-} from "@chakra-ui/core";
-import {
-  CarouselProvider,
-  Slider,
-  Slide,
-  ButtonBack,
-  ButtonNext,
-} from "pure-react-carousel";
-import "pure-react-carousel/dist/react-carousel.es.css";
+import { Flex, Heading, Text, Divider, Button } from "@chakra-ui/core";
+
 import { BaseContainer, Brand } from "../components";
 import Carousel from "react-elastic-carousel";
 
