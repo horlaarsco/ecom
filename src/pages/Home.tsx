@@ -26,32 +26,42 @@ function Home() {
         flexDirection='column'
       >
         <Heading
-          fontSize={{ base: "20px", md: "6xl" }}
+          fontSize={{ base: "xl", sm: "4xl", md: "5xl", lg: "6xl" }}
           fontWeight='bold'
           as='h1'
         >
           This is ECOM
         </Heading>
-        <Text fontSize='lg' fontWeight='medium' my='3'>
+        <Text
+          textAlign='center'
+          fontSize={{ base: "md", sm: "lg" }}
+          fontWeight='medium'
+          my='3'
+        >
           E-COM DESIGN and 850+ brands
         </Text>
-        <Flex>
+        <Flex flexDir={{ base: "column", sm: "row" }}>
           <Button
-            px='10'
+            px={{ base: "5", sm: "10" }}
             lineHeight='none'
             background='black'
             size='lg'
+            height={{ base: "2rem", sm: "3rem" }}
             mx='3'
+            fontSize={{ base: "md", sm: "lg" }}
             _hover={{ color: "black", background: "white" }}
           >
             Shop Men
           </Button>
           <Button
-            px='10'
+            px={{ base: "5", sm: "10" }}
             lineHeight='none'
             background='black'
             size='lg'
             mx='3'
+            height={{ base: "2rem", sm: "3rem" }}
+            mt={{ base: "3", sm: 0 }}
+            fontSize={{ base: "md", sm: "lg" }}
             _hover={{ color: "black", background: "white" }}
           >
             Shop Women
@@ -61,14 +71,15 @@ function Home() {
 
       <BaseContainer
         color='white'
-        p='3'
         bg='#303133'
         width='100%'
         textAlign='center'
         justifySelf='flex-end'
         fontWeight='bold'
       >
-        <Text fontSize='lg'>GET 20% OFF EVERYTHING WITH CODE 2020</Text>
+        <Text fontSize={{ base: "md", sm: "lg" }}>
+          GET 20% OFF EVERYTHING WITH CODE 2020
+        </Text>
       </BaseContainer>
       <BaseContainer
         d='flex'
@@ -88,8 +99,8 @@ function Home() {
         <SimpleGrid
           mt='6'
           w='100%'
-          columns={{ base: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
-          spacing={10}
+          columns={{ base: 2, sm: 3, md: 4, lg: 5 }}
+          spacing={5}
         >
           <Brand />
           <Brand />

@@ -12,8 +12,9 @@ export default function Footer() {
           color='#666'
           mt='6'
           w='100%'
-          columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
-          spacing={10}
+          columns={{ base: 2, sm: 2, md: 3, lg: 4 }}
+          spacing={[5, 10]}
+          fontSize={{ base: "sm", sm: "md" }}
         >
           <List spacing={2}>
             <ListItem mb='5' color='black' fontWeight='bold'>
@@ -50,7 +51,12 @@ export default function Footer() {
         </SimpleGrid>
       </BaseContainer>
       <Box bg='#ddd' color='black'>
-        <BaseContainer p='3' d='flex' justifyContent='space-between'>
+        <BaseContainer
+          p='3'
+          d='flex'
+          fontSize={{ base: "sm", sm: "md" }}
+          justifyContent='space-between'
+        >
           <Text>© 2020 ECOM</Text>
           <Text>© 2020 ECOM</Text>
         </BaseContainer>

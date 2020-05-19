@@ -44,9 +44,22 @@ export default function Header() {
             />
           </Flex>
           <Flex align='center'>
-            <Box size='30px' color='white' as={BsPerson} />
-            <Box size='27px' color='white' mx='5' as={MdFavoriteBorder} />
-            <Box size='27px' color='white' as={FiShoppingCart} />
+            <Box
+              size={{ base: "20px", sm: "30px" }}
+              color='white'
+              as={BsPerson}
+            />
+            <Box
+              size={{ base: "20px", sm: "30px" }}
+              color='white'
+              mx={{ base: 3, sm: "5" }}
+              as={MdFavoriteBorder}
+            />
+            <Box
+              size={{ base: "20px", sm: "30px" }}
+              color='white'
+              as={FiShoppingCart}
+            />
           </Flex>
         </Flex>
       </BaseContainer>

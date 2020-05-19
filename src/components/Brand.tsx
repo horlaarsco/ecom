@@ -12,11 +12,11 @@ export default function Brand() {
       <Text
         fontWeight='300'
         mt='3'
-        fontSize='lg'
+        fontSize={{ base: "md", sm: "lg" }}
         color='black'
         textAlign='center'
       >
-        Nike, up to 60% off direct from brand
+        Nike
       </Text>
     </Box>
   );
