@@ -1,0 +1,23 @@
+import React from "react";
+import { Box, Image, Text } from "@chakra-ui/core";
+
+export default function Brand() {
+  return (
+    <Box>
+      <Image
+        mx='auto'
+        width='100%'
+        src='https://content.asos-media.com/-/media/homepages/ww/2020/05/11/ww_summerfaceandbody_moment.jpg'
+      />
+      <Text
+        fontWeight='bold'
+        mt='3'
+        fontSize='lg'
+        color='black'
+        textAlign='center'
+      >
+        Nike, up to 60% off direct from brand
+      </Text>
+    </Box>
+  );
+}
