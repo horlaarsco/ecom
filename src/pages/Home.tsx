@@ -52,25 +52,27 @@ function Home() {
           <Button
             px={{ base: "5", sm: "10" }}
             lineHeight='none'
-            background='black'
+            backgroundColor='white'
+            color='black'
             size='lg'
             height={{ base: "2rem", sm: "3rem" }}
             mx='3'
             fontSize={{ base: "md", sm: "lg" }}
-            _hover={{ color: "black", background: "white" }}
+            _hover={{ color: "white", background: "black" }}
           >
             Shop Men
           </Button>
           <Button
             px={{ base: "5", sm: "10" }}
             lineHeight='none'
-            background='black'
+            backgroundColor='white'
             size='lg'
+            color='black'
             mx='3'
             height={{ base: "2rem", sm: "3rem" }}
             mt={{ base: "3", sm: 0 }}
             fontSize={{ base: "md", sm: "lg" }}
-            _hover={{ color: "black", background: "white" }}
+            _hover={{ color: "white", background: "black" }}
           >
             Shop Women
           </Button>
