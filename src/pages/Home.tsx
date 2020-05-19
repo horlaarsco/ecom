@@ -7,8 +7,16 @@ import {
   Button,
   SimpleGrid,
 } from "@chakra-ui/core";
-
+import {
+  CarouselProvider,
+  Slider,
+  Slide,
+  ButtonBack,
+  ButtonNext,
+} from "pure-react-carousel";
+import "pure-react-carousel/dist/react-carousel.es.css";
 import { BaseContainer, Brand } from "../components";
+import Carousel from "react-elastic-carousel";
 
 function Home() {
   return (
@@ -92,22 +100,30 @@ function Home() {
           fontWeight='bold'
           as='h1'
           color='black'
+          my='8'
         >
           Shop Brands
         </Heading>
 
-        <SimpleGrid
-          mt='6'
-          w='100%'
-          columns={{ base: 2, sm: 3, md: 4, lg: 5 }}
-          spacing={5}
+        <Carousel
+          itemPadding={[0, 5]}
+          breakPoints={breakPoints}
+          disableArrowsOnEnd={false}
         >
           <Brand />
           <Brand />
           <Brand />
           <Brand />
           <Brand />
-        </SimpleGrid>
+          <Brand />
+          <Brand />
+          <Brand />
+          <Brand />
+          <Brand />
+          <Brand />
+          <Brand />
+          <Brand />
+        </Carousel>
       </BaseContainer>
       <Divider />
     </div>
@@ -115,3 +131,11 @@ function Home() {
 }
 
 export default Home;
+
+const breakPoints = [
+  { width: 1, itemsToShow: 1 },
+  { width: 550, itemsToShow: 2 },
+  { width: 768, itemsToShow: 4 },
+  { width: 1200, itemsToShow: 5 },
+  { width: 1400, itemsToShow: 5 },
+];
