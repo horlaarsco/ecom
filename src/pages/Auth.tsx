@@ -1,26 +1,22 @@
 import React, { useState } from "react";
+
 import {
   Tabs,
   TabList,
   TabPanels,
   Tab,
   TabPanel,
-  Heading,
-  FormControl,
-  FormLabel,
-  // FormErrorMessage,
-  Input,
-  Button,
   Box,
   Link,
 } from "@chakra-ui/core";
+import { Signup, Login } from "../components";
 
-export default function Login() {
+export default function Auth() {
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
     <Tabs
-      variantColor='white'
+      variantColor='dark'
       variant='enclosed'
       p='6'
       my='10'
@@ -57,158 +53,16 @@ export default function Login() {
         my='4'
       >
         <TabPanel w='full'>
-          <Heading
-            fontSize={{ base: "sm", sm: "lg" }}
-            my='6'
-            textAlign='center'
-          >
-            SIGN UP USING YOUR EMAIL ADDRESS
-          </Heading>
-          <FormControl w='full'>
-            <FormLabel
-              fontSize={{ base: "sm", sm: "lg" }}
-              letterSpacing='widest'
-              my='2'
-              mb={{ base: 0, sm: 2 }}
-              htmlFor='email'
-            >
-              Email address
-            </FormLabel>
-            <Input
-              type='email'
-              id='email'
-              aria-describedby='email-helper-text'
-            />
-          </FormControl>
-          <FormControl w='full'>
-            <FormLabel
-              fontSize={{ base: "sm", sm: "lg" }}
-              letterSpacing='widest'
-              my='2'
-              htmlFor='username'
-              mb={{ base: 0, sm: 2 }}
-            >
-              Username
-            </FormLabel>
-            <Input id='username' />
-          </FormControl>
-          <FormControl w='full'>
-            <FormLabel
-              fontSize={{ base: "sm", sm: "lg" }}
-              letterSpacing='widest'
-              my='2'
-              mb={{ base: 0, sm: 2 }}
-              htmlFor='fname'
-            >
-              First Name
-            </FormLabel>
-            <Input id='fname' />
-          </FormControl>
-          <FormControl w='full'>
-            <FormLabel
-              fontSize={{ base: "sm", sm: "lg" }}
-              letterSpacing='widest'
-              my='2'
-              mb={{ base: 0, sm: 2 }}
-              htmlFor='lname'
-            >
-              Last Name
-            </FormLabel>
-            <Input id='lname' />
-          </FormControl>
-          <FormControl w='full'>
-            <FormLabel
-              fontSize={{ base: "sm", sm: "lg" }}
-              letterSpacing='widest'
-              my='2'
-              mb={{ base: 0, sm: 2 }}
-              htmlFor='password'
-            >
-              Password
-            </FormLabel>
-            <Input type='password' id='password' />
-          </FormControl>
-          <FormControl w='full'>
-            <FormLabel
-              fontSize={{ base: "sm", sm: "lg" }}
-              letterSpacing='widest'
-              my='2'
-              mb={{ base: 0, sm: 2 }}
-              htmlFor='cpassword'
-            >
-              Confirm Password
-            </FormLabel>
-            <Input type='password' id='cpassword' />
-          </FormControl>
-          <Button
-            w='full'
-            backgroundColor='black'
-            color='white'
-            _hover={{ background: "#303133" }}
-            mt={4}
-            type='submit'
-          >
-            JOIN
-          </Button>
+          <Signup />
           <Box my='5' textAlign='center'>
             <Link color='#303133' onClick={() => setTabIndex(1)}>
               Already have an account?
             </Link>
           </Box>
         </TabPanel>
+
         <TabPanel w='full'>
-          <Heading
-            fontSize={{ base: "sm", sm: "lg" }}
-            my='6'
-            textAlign='center'
-          >
-            SIGN IN WITH EMAIL
-          </Heading>
-          <FormControl w='full'>
-            <FormLabel
-              fontSize={{ base: "sm", sm: "lg" }}
-              letterSpacing='widest'
-              mb={{ base: 0, sm: 2 }}
-              my='2'
-              htmlFor='email'
-            >
-              Email address
-            </FormLabel>
-            <Input
-              type='email'
-              id='email'
-              aria-describedby='email-helper-text'
-            />
-          </FormControl>
-          <FormControl w='full' my='4'>
-            <FormLabel
-              fontSize={{ base: "sm", sm: "lg" }}
-              letterSpacing='widest'
-              my='2'
-              mb={{ base: 0, sm: 2 }}
-              htmlFor='password'
-            >
-              Password
-            </FormLabel>
-            <Input
-              type='password'
-              id='password'
-              aria-describedby='email-helper-text'
-            />
-          </FormControl>
-          <Button
-            w='full'
-            backgroundColor='black'
-            color='white'
-            _hover={{ background: "#303133" }}
-            mt={4}
-            type='submit'
-          >
-            Submit
-          </Button>
-          <Box my='5' textAlign='center'>
-            <Link color='#303133'>Forgot password?</Link>
-          </Box>
+          <Login />
         </TabPanel>
       </TabPanels>
     </Tabs>

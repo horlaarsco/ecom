@@ -17,7 +17,6 @@ import BaseContainer from "./BaseContainer";
 
 export default function Header() {
   const [cartVisibility, setCartVisibility] = useState("none");
-
   const changeCartVisiblity = () => {
     if (cartVisibility === "none") {
       setCartVisibility("block");
@@ -113,9 +112,9 @@ export default function Header() {
               >
                 <Text p='4' d='inline-flex' fontWeight='bold'>
                   Cart,{" "}
-                  <Text ml='1' fontWeight='normal'>
+                  <Box as='span' ml='1' fontWeight='normal'>
                     1 items
-                  </Text>
+                  </Box>
                 </Text>
                 <Flex p='4' bg='#F7F7F7'>
                   <Image
@@ -139,12 +138,7 @@ export default function Header() {
                 </Flex>
                 <Flex p='4' bg='#f5f5f5' justify='space-between'>
                   <Link to='/cart'>
-                    <Button
-                      bg='white'
-                      border='1px solid #eee'
-                      color='black'
-                      variantColor='black'
-                    >
+                    <Button border='1px solid #eee' variantColor='dark'>
                       View Bag
                     </Button>
                   </Link>
