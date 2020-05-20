@@ -6,6 +6,7 @@ import CartItem from "./CartItem";
 import ProductCard from "./ProductCard";
 import Login from "./Login";
 import Signup from "./Signup";
+import Color from "./Color";
 
 export {
   BaseContainer,
@@ -16,4 +17,5 @@ export {
   ProductCard,
   Login,
   Signup,
+  Color,
 };

@@ -6,7 +6,17 @@ import {
   useLocation,
 } from "react-router-dom";
 import { Header, Footer } from "./components";
-import { Home, Auth, Cart, Checkout, Gender, Brand, Product } from "./pages";
+import {
+  Home,
+  Auth,
+  Cart,
+  Checkout,
+  Gender,
+  Brand,
+  Product,
+  AddProduct,
+} from "./pages";
+import Cloid from "./pages/cloid.js";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -25,6 +35,12 @@ function App() {
         <ScrollToTop />
         <Header />
         <Switch>
+          <Route path='/addprod'>
+            <AddProduct />
+          </Route>
+          <Route path='/cloid'>
+            <Cloid />
+          </Route>
           <Route path='/auth'>
             <Auth />
           </Route>
