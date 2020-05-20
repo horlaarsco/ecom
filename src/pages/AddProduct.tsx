@@ -118,7 +118,7 @@ export default function AddProduct() {
       brand,
       category,
       colors,
-      owner: "5ec56cb1c9ed2746ba670bd7",
+      owner: "5ec5a8aca06a3400041b0c7c",
       images: images,
       description,
     };
@@ -179,7 +179,7 @@ export default function AddProduct() {
                   placeholder='Select Brand'
                   onChange={handleBrand}
                 >
-                  <option value='5ec56cb4c9ed2746ba670bd9'>Nike</option>
+                  <option value='5ec5a968606ac30004df9276'>Nike</option>
                 </Select>
               </FormControl>
               <FormControl my='3'>
