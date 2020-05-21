@@ -15,9 +15,10 @@ import {
   Divider,
 } from "@chakra-ui/core";
 import { BaseContainer, ProductCard } from "../components";
+import EmptyPage from "./EmptyPage";
 
-const GET_PRODUCTS = gql`
-  query getGreeting($slug: String!) {
+const GET_PRODUCT = gql`
+  query getProduct($slug: String!) {
     product(slug: $slug) {
       id
       name
@@ -40,7 +41,7 @@ const GET_PRODUCTS = gql`
 export default function Product() {
   let { slug } = useParams();
 
-  const { loading, error, data } = useQuery(GET_PRODUCTS, {
+  const { loading, error, data } = useQuery(GET_PRODUCT, {
     variables: { slug: slug },
   });
 
@@ -49,7 +50,7 @@ export default function Product() {
   }
   if (error) {
     console.error(error);
-    return <div>Error!</div>;
+    return <EmptyPage />;
   }
 
   return (
@@ -58,8 +59,8 @@ export default function Product() {
         <Flex direction={{ base: "column", md: "row" }} justify='space-around'>
           <Box w={{ base: "100%", md: "60%" }}>
             <Carousel breakPoints={breakPoints} disableArrowsOnEnd={false}>
-              {data.product.images.map((image: any) => (
-                <Image h='500px' mr='6' src={image} />
+              {data.product.images.map((image: any, index: any) => (
+                <Image key={index} h='500px' mr='6' src={image} />
               ))}
             </Carousel>
           </Box>
@@ -81,12 +82,16 @@ export default function Product() {
             </Text>
             <Select mt='4' placeholder='Select Color'>
               {data.product.colors.map((color: any) => (
-                <option value={color}>{color}</option>
+                <option key={color} value={color}>
+                  {color}
+                </option>
               ))}
             </Select>
             <Select mt='4' placeholder='Select size'>
               {data.product.sizes.map((size: any) => (
-                <option value={size}>{size}</option>
+                <option key={size} value={size}>
+                  {size}
+                </option>
               ))}
             </Select>
 
@@ -112,7 +117,7 @@ export default function Product() {
         <Heading my='6' fontSize='xl'>
           YOU MIGHT ALSO LIKE
         </Heading>
-        <Carousel
+        {/* <Carousel
           itemPadding={[0, 5]}
           breakPoints={breakPointss}
           disableArrowsOnEnd={false}
@@ -130,7 +135,7 @@ export default function Product() {
           <ProductCard />
           <ProductCard />
           <ProductCard />
-        </Carousel>
+        </Carousel> */}
       </BaseContainer>
     </Box>
   );

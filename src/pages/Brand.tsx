@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { BaseContainer, ProductCard } from "../components";
+import { useQuery, useLazyQuery } from "@apollo/react-hooks";
+import { gql } from "apollo-boost";
+
 import {
   SimpleGrid,
   Heading,
@@ -10,10 +13,42 @@ import {
   Button,
   Flex,
 } from "@chakra-ui/core";
+import EmptyPage from "./EmptyPage";
+import { Product } from ".";
 
 // @ts-ignore
+
+const GET_BRAND = gql`
+  query getBrand($slug: String!) {
+    brand(slug: $slug) {
+      id
+      name
+      slug
+      image
+      products {
+        name
+        price
+        slug
+        images
+      }
+    }
+  }
+`;
+
 export default function Brand() {
-  let { brand } = useParams();
+  let { slug } = useParams();
+
+  const { loading, error, data } = useQuery(GET_BRAND, {
+    variables: { slug: slug },
+  });
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    console.error(error);
+    return <EmptyPage />;
+  }
 
   return (
     <>
@@ -27,10 +62,10 @@ export default function Brand() {
               h='100px'
               mr='6'
               mb={{ base: 6, md: 0 }}
-              src='https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTNoD9oT_VnEYNKKeOor8U4qK5T1LF4bC2iRDD75fQdveQMHTUA'
+              src={data.brand.image}
             />
             <Box>
-              <Heading fontSize='lg'>{`${brand}'s Fashion`}</Heading>
+              <Heading fontSize='lg'>{`${data.brand.name}'s Fashion`}</Heading>
               <Text lineHeight='taller' fontSize='sm'>
                 You’ve nailed your outfit, now all that’s left is the footwear –
                 which is where our edit of shoes for women comes in. Whether
@@ -42,20 +77,16 @@ export default function Brand() {
       </Box>
       <BaseContainer mt='6'>
         <SimpleGrid columns={[2, 3, 4, 5]} spacing={5}>
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard /> <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
+          {data.brand.products.map((product: any) => (
+            <ProductCard
+              key={product.slug}
+              name={product.name}
+              brand={slug}
+              price={product.price}
+              slug={product.slug}
+              image={product.images[0]}
+            />
+          ))}
         </SimpleGrid>
         <Flex justify='center'>
           <Button

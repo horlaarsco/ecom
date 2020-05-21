@@ -1,11 +1,35 @@
 import React from "react";
 import { Flex, Heading, Text, Divider, Button } from "@chakra-ui/core";
 import { Link } from "react-router-dom";
+import { useQuery, useLazyQuery } from "@apollo/react-hooks";
+import { gql } from "apollo-boost";
 
 import { BaseContainer, Brand } from "../components";
 import Carousel from "react-elastic-carousel";
+import EmptyPage from "./EmptyPage";
+
+const GET_BRANDS = gql`
+  query {
+    brands {
+      id
+      name
+      slug
+      image
+    }
+  }
+`;
 
 function Home() {
+  const { loading, error, data } = useQuery(GET_BRANDS);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    console.error(error);
+    return <EmptyPage />;
+  }
+
   return (
     <div>
       <BaseContainer
@@ -78,43 +102,39 @@ function Home() {
           GET 20% OFF EVERYTHING WITH CODE 2020
         </Text>
       </BaseContainer>
-      <BaseContainer
-        d='flex'
-        flexDirection='column'
-        justifyContent='center'
-        alignItems='center'
-      >
-        <Heading
-          fontSize={{ base: "20px", md: "4xl" }}
-          fontWeight='bold'
-          as='h1'
-          color='black'
-          my='8'
+      {data.brands.length > 0 && (
+        <BaseContainer
+          d='flex'
+          flexDirection='column'
+          justifyContent='center'
+          alignItems='center'
         >
-          Shop Brands
-        </Heading>
+          <Heading
+            fontSize={{ base: "20px", md: "4xl" }}
+            fontWeight='bold'
+            as='h1'
+            color='black'
+            my='8'
+          >
+            Shop Brands
+          </Heading>
 
-        <Carousel
-          itemPadding={[0, 5]}
-          breakPoints={breakPoints}
-          disableArrowsOnEnd={false}
-        >
-          <Brand />
-          <Brand />
-          <Brand />
-          <Brand />
-          <Brand />
-          <Brand />
-          <Brand />
-          <Brand />
-          <Brand />
-          <Brand />
-          <Brand />
-          <Brand />
-          <Brand />
-        </Carousel>
-      </BaseContainer>
-      <Divider />
+          <Carousel
+            itemPadding={[0, 5]}
+            breakPoints={breakPoints}
+            disableArrowsOnEnd={false}
+          >
+            {data.brands.map((brand: any) => (
+              <Brand
+                key={brand.id}
+                image={brand.image}
+                name={brand.name}
+                slug={brand.slug}
+              />
+            ))}
+          </Carousel>
+        </BaseContainer>
+      )}
     </div>
   );
 }

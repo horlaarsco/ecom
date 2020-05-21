@@ -51,7 +51,7 @@ function App() {
           <Route path='/product/:slug'>
             <Product />
           </Route>
-          <Route path={`/brand/:brand`}>
+          <Route path='/brand/:slug'>
             <Brand />
           </Route>
           <Route path='/checkout'>

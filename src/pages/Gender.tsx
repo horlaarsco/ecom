@@ -29,7 +29,7 @@ export default function Gender(props) {
       </Box>
       <BaseContainer mt='6'>
         <SimpleGrid columns={[2, 3, 4, 5]} spacing={5}>
-          <ProductCard />
+          {/* <ProductCard />
           <ProductCard />
           <ProductCard />
           <ProductCard />
@@ -42,7 +42,7 @@ export default function Gender(props) {
           <ProductCard />
           <ProductCard />
           <ProductCard />
-          <ProductCard />
+          <ProductCard /> */}
         </SimpleGrid>
         <Flex justify='center'>
           <Button

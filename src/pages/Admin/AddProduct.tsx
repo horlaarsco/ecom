@@ -124,7 +124,7 @@ export default function AddProduct() {
       brand,
       category,
       colors,
-      owner: "5ec5a8aca06a3400041b0c7c",
+      owner: "5ec69a8b3cba5900044f22ca",
       images: images,
       description,
     };
@@ -151,6 +151,8 @@ export default function AddProduct() {
         newError = "Email or Username already exist";
       } else if (error.message.includes("Required")) {
         newError = "Fill all required fields";
+      } else {
+        newError = error;
       }
 
       toast({
