@@ -5,6 +5,17 @@ import Checkout from "./Checkout";
 import Gender from "./Gender";
 import Brand from "./Brand";
 import Product from "./Product";
-import AddProduct from "./AddProduct";
+import AddProduct from "./Admin/AddProduct";
+import AddBrand from "./Admin/AddBrand";
 
-export { Home, Auth, Cart, Checkout, Gender, Brand, Product, AddProduct };
+export {
+  Home,
+  Auth,
+  Cart,
+  Checkout,
+  Gender,
+  Brand,
+  Product,
+  AddProduct,
+  AddBrand,
+};

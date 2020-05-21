@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { gql } from "apollo-boost";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation, useQuery } from "@apollo/react-hooks";
+import { useHistory } from "react-router-dom";
 
 import {
   Flex,
   Heading,
   Box,
-  Divider,
   Text,
   Image,
   useToast,
@@ -16,20 +16,14 @@ import {
   FormLabel,
   FormErrorMessage,
   Textarea,
-  FormHelperText,
   Select,
   Input,
   InputGroup,
   InputLeftAddon,
-  Tag,
-  TagIcon,
-  TagLabel,
-  TagCloseButton,
-  Stack,
 } from "@chakra-ui/core";
 import Carousel, { consts } from "react-elastic-carousel";
-import { BaseContainer, Brand, Color } from "../components";
-import Sizes from "../components/Sizes";
+import { BaseContainer, Color } from "../../components";
+import Sizes from "../../components/Sizes";
 
 const ADD_PRODUCT = gql`
   mutation($data: ProductInput) {
@@ -58,12 +52,24 @@ const ADD_PRODUCT = gql`
   }
 `;
 
+const GET_BRANDS = gql`
+  {
+    brands {
+      id
+      name
+    }
+  }
+`;
+
 export default function AddProduct() {
   const toast = useToast();
+  let history = useHistory();
 
-  const { handleSubmit, register, errors, watch } = useForm();
+  const { loading, error, data } = useQuery(GET_BRANDS);
 
-  const [addProduct, { loading }] = useMutation(ADD_PRODUCT);
+  const { handleSubmit, register, errors } = useForm();
+  // @ts-ignore
+  const [addProduct, { Addloading }] = useMutation(ADD_PRODUCT);
 
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
@@ -122,11 +128,15 @@ export default function AddProduct() {
       images: images,
       description,
     };
-    console.log(valuesToSubmit);
     try {
       const Newdata = await addProduct({
         variables: { data: { ...valuesToSubmit } },
       });
+      // @ts-ignore
+      console.log(Newdata.data.addProduct.slug);
+
+      history.push(`/product/${Newdata.data.addProduct.slug}`);
+
       toast({
         position: "bottom-right",
         title: "Product Added.",
@@ -165,6 +175,15 @@ export default function AddProduct() {
   const handleDescription = (e: any) => {
     setDescription(e.target.value);
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    console.error(error);
+    return <div>Error!</div>;
+  }
+
   return (
     <Box bg='#f5f5f5'>
       <BaseContainer color='black'>
@@ -179,7 +198,11 @@ export default function AddProduct() {
                   placeholder='Select Brand'
                   onChange={handleBrand}
                 >
-                  <option value='5ec5a968606ac30004df9276'>Nike</option>
+                  {data.brands.map((brand: any, index: number) => (
+                    <option key={index} value={brand.id}>
+                      {brand.name}
+                    </option>
+                  ))}
                 </Select>
               </FormControl>
               <FormControl my='3'>
@@ -321,7 +344,7 @@ export default function AddProduct() {
                 type='submit'
                 border='1px solid #eee'
                 variantColor='dark'
-                isLoading={loading}
+                isLoading={Addloading}
               >
                 Add Product
               </Button>

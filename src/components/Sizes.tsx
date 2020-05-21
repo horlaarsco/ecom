@@ -14,7 +14,7 @@ export default function Sizes({ setSizes, sizes, setsizeerror }) {
   const [size, setSize] = useState("");
 
   const sizeInput = () => {
-    if (size == "") {
+    if (size === "") {
     } else {
       // @ts-ignore
       setSizes([...sizes, size]);

@@ -15,8 +15,8 @@ import {
   Brand,
   Product,
   AddProduct,
+  AddBrand,
 } from "./pages";
-import Cloid from "./pages/cloid.js";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -35,19 +35,20 @@ function App() {
         <ScrollToTop />
         <Header />
         <Switch>
-          <Route path='/addprod'>
+          <Route path='/admin/add-product'>
             <AddProduct />
           </Route>
-          <Route path='/cloid'>
-            <Cloid />
+          <Route path='/admin/add-brand'>
+            <AddBrand />
           </Route>
+
           <Route path='/auth'>
             <Auth />
           </Route>
           <Route path='/cart'>
             <Cart />
           </Route>
-          <Route path='/product'>
+          <Route path='/product/:slug'>
             <Product />
           </Route>
           <Route path={`/brand/:brand`}>

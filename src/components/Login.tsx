@@ -1,59 +1,101 @@
 import React from "react";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@apollo/react-hooks";
+
 import {
   Heading,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  Input,
   Button,
   Box,
   Link,
   useToast,
+  FormControl,
+  FormLabel,
+  Input,
+  FormErrorMessage,
 } from "@chakra-ui/core";
+import { useHistory } from "react-router-dom";
+
+import { passwordValidator } from "../utils/validations";
+
+import FormType from "./FormControl";
+import Toast from "./Toast";
+import { LOG_IN } from "../utils/queries";
+
 export default function Login() {
+  let history = useHistory();
+
+  const toast = useToast();
+  const [loginUser, { loading }] = useMutation(LOG_IN);
+
+  const { handleSubmit, register, errors, watch } = useForm();
+
+  // @ts-ignore
+
+  const onSubmit = async (values) => {
+    console.log(values);
+
+    try {
+      const Newdata = await loginUser({ variables: { data: { ...values } } });
+      console.log(Newdata);
+      history.push("/");
+      Toast(toast, "Login Sucessfull", "success", "Welcome to E-COM.");
+    } catch (error) {
+      let newError = "";
+      if (error.message.includes("Incorrect")) {
+        newError = "Incorrect Email or Username";
+      } else {
+        newError = "Fill all required fields";
+      }
+      Toast(toast, "An error occurred.", "error", `${newError}`);
+    }
+  };
+
   return (
     <>
       <Heading fontSize={{ base: "sm", sm: "lg" }} my='6' textAlign='center'>
         SIGN IN WITH EMAIL
       </Heading>
-      <FormControl w='full'>
-        <FormLabel
-          fontSize={{ base: "sm", sm: "lg" }}
-          letterSpacing='widest'
-          mb={{ base: 0, sm: 2 }}
-          my='2'
-          htmlFor='email'
-        >
-          Email address
-        </FormLabel>
-        <Input type='email' id='email' aria-describedby='email-helper-text' />
-      </FormControl>
-      <FormControl w='full' my='4'>
-        <FormLabel
-          fontSize={{ base: "sm", sm: "lg" }}
-          letterSpacing='widest'
-          my='2'
-          mb={{ base: 0, sm: 2 }}
-          htmlFor='password'
-        >
-          Password
-        </FormLabel>
-        <Input
-          type='password'
-          id='password'
-          aria-describedby='email-helper-text'
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormControl w='full' isInvalid={errors.user}>
+          <FormLabel
+            fontSize={{ base: "sm", sm: "lg" }}
+            letterSpacing='widest'
+            my='2'
+            mb={{ base: 0, sm: 2 }}
+            htmlFor='user'
+          >
+            Email / Username
+          </FormLabel>
+          <Input
+            id='user'
+            name='user'
+            ref={register({
+              // required: "Email or Username is Required",
+            })}
+          />
+          <FormErrorMessage>
+            {errors.user && errors.user.message}
+          </FormErrorMessage>
+        </FormControl>
+        <FormType
+          register={register}
+          errors={errors}
+          name='password'
+          validator={passwordValidator}
+          title='Password'
         />
-      </FormControl>
-      <Button
-        w='full'
-        backgroundColor='black'
-        color='white'
-        _hover={{ background: "#303133" }}
-        mt={4}
-        type='submit'
-      >
-        Submit
-      </Button>
+        <Button
+          w='full'
+          backgroundColor='black'
+          color='white'
+          _hover={{ background: "#303133" }}
+          mt={4}
+          type='submit'
+          isLoading={loading}
+        >
+          Submit
+        </Button>
+      </form>
       <Box my='5' textAlign='center'>
         <Link color='#303133'>Forgot password?</Link>
       </Box>

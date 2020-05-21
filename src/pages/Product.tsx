@@ -1,5 +1,9 @@
 import React from "react";
 import Carousel from "react-elastic-carousel";
+import { gql } from "apollo-boost";
+import { useQuery } from "@apollo/react-hooks";
+import { useParams } from "react-router-dom";
+
 import {
   Heading,
   Text,
@@ -12,33 +16,51 @@ import {
 } from "@chakra-ui/core";
 import { BaseContainer, ProductCard } from "../components";
 
+const GET_PRODUCTS = gql`
+  query getGreeting($slug: String!) {
+    product(slug: $slug) {
+      id
+      name
+      slug
+      brand {
+        name
+      }
+      images
+      sizes
+      price
+      quantity
+      salePrice
+      category
+      colors
+      description
+    }
+  }
+`;
+
 export default function Product() {
+  let { slug } = useParams();
+
+  const { loading, error, data } = useQuery(GET_PRODUCTS, {
+    variables: { slug: slug },
+  });
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    console.error(error);
+    return <div>Error!</div>;
+  }
+
   return (
     <Box bg='#f5f5f5' color='black' p={{ base: 3, lg: 8 }}>
       <BaseContainer p={{ base: 3, md: 24 }}>
         <Flex direction={{ base: "column", md: "row" }} justify='space-around'>
           <Box w={{ base: "100%", md: "60%" }}>
             <Carousel breakPoints={breakPoints} disableArrowsOnEnd={false}>
-              <Image
-                h='500px'
-                mr='6'
-                src='https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTNoD9oT_VnEYNKKeOor8U4qK5T1LF4bC2iRDD75fQdveQMHTUA'
-              />{" "}
-              <Image
-                h='500px'
-                mr='6'
-                src='https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTNoD9oT_VnEYNKKeOor8U4qK5T1LF4bC2iRDD75fQdveQMHTUA'
-              />{" "}
-              <Image
-                h='500px'
-                mr='6'
-                src='https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTNoD9oT_VnEYNKKeOor8U4qK5T1LF4bC2iRDD75fQdveQMHTUA'
-              />{" "}
-              <Image
-                h='500px'
-                mr='6'
-                src='https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTNoD9oT_VnEYNKKeOor8U4qK5T1LF4bC2iRDD75fQdveQMHTUA'
-              />
+              {data.product.images.map((image: any) => (
+                <Image h='500px' mr='6' src={image} />
+              ))}
             </Carousel>
           </Box>
           <Flex
@@ -50,20 +72,22 @@ export default function Product() {
             color='black'
             my={{ base: 6, md: 0 }}
           >
-            <Heading fontSize='2xl'>
-              Miss Selfridge espadrille trainers in beige
-            </Heading>
+            <Heading fontSize='2xl'>{data.product.name}</Heading>
             <Text mt='3'>
-              Brand: <strong>Nike</strong>
+              Brand: <strong>{data.product.brand.name}</strong>
             </Text>
             <Text my='6' fontWeight='bold'>
-              €40.99
+              €{data.product.salePrice}
             </Text>
-            <Text fontWeight='bold'>COLOUR: White</Text>
+            <Select mt='4' placeholder='Select Color'>
+              {data.product.colors.map((color: any) => (
+                <option value={color}>{color}</option>
+              ))}
+            </Select>
             <Select mt='4' placeholder='Select size'>
-              <option value='option1'>Option 1</option>
-              <option value='option2'>Option 2</option>
-              <option value='option3'>Option 3</option>
+              {data.product.sizes.map((size: any) => (
+                <option value={size}>{size}</option>
+              ))}
             </Select>
 
             <Button mt='6' variantColor='green'>
@@ -77,13 +101,10 @@ export default function Product() {
         <Divider />
 
         <Heading my='6' px='6' fontWeight='700' fontSize='xl'>
-          Nike Benassi Solarsoft 2 Slide - Blue / Royal
+          {data.product.name}
         </Heading>
         <Text mb='6' px='6'>
-          The Nike Benassi Solarsoft 2 Men's Slide improves upon its predecessor
-          with more padding on the strap and a textured footbed for added
-          comfort and support. A soft, pliable foam midsole offers plush
-          cushioning, and flex grooves allow your foot to mover more naturally.
+          {data.product.description}
         </Text>
       </BaseContainer>
       <Divider borderColor='black' my='10' />

@@ -12,7 +12,7 @@ import {
 export default function Color({ setColors, colors, setcolorerror }) {
   const [color, setColor] = useState("");
   const colorInput = () => {
-    if (color == "") {
+    if (color === "") {
     } else {
       // @ts-ignore
       setColors([...colors, color]);
