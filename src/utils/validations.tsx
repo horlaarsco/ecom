@@ -29,7 +29,7 @@ export const passwordValidator = (register: any) =>
   register({
     required: "Password is Required",
     minLength: {
-      value: 8,
+      value: 5,
       message: "Password must have at least 8 characters",
     },
   });

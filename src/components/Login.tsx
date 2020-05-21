@@ -38,11 +38,14 @@ export default function Login() {
       const Newdata = await loginUser({ variables: { data: { ...values } } });
       console.log(Newdata);
       history.push("/");
+
       Toast(toast, "Login Sucessfull", "success", "Welcome to E-COM.");
     } catch (error) {
       let newError = "";
-      if (error.message.includes("Incorrect")) {
+      if (error.message.includes("Email")) {
         newError = "Incorrect Email or Username";
+      } else if (error.message.includes("Password")) {
+        newError = "Incorrect Password";
       } else {
         newError = "Fill all required fields";
       }
