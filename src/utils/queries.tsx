@@ -14,7 +14,7 @@ export const SIGN_UP = gql`
       createdAt
       verified
       id
-      tokens
+      token
     }
   }
 `;
@@ -33,7 +33,26 @@ export const LOG_IN = gql`
       createdAt
       verified
       id
-      tokens
+      token
+    }
+  }
+`;
+
+export const CHECK_LOG_IN = gql`
+  mutation Login($type: ID) {
+    verifylogin(id: $type) {
+      firstName
+      lastName
+      email
+      password
+      role
+      username
+      password
+      updatedAt
+      createdAt
+      verified
+      id
+      token
     }
   }
 `;

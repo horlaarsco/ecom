@@ -25,7 +25,7 @@ import Toast from "./Toast";
 import FormType from "./FormControl";
 import { AuthContext } from "../App";
 
-export default function Signup() {
+export default function Edit() {
   const toast = useToast();
   const [signupUser, { loading }] = useMutation(SIGN_UP);
   let history = useHistory();
@@ -70,9 +70,6 @@ export default function Signup() {
 
   return (
     <>
-      <Heading fontSize={{ base: "sm", sm: "lg" }} my='6' textAlign='center'>
-        SIGN UP USING YOUR EMAIL ADDRESS
-      </Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormType
           register={register}

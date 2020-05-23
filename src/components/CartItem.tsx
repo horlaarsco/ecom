@@ -9,7 +9,8 @@ import {
   Divider,
 } from "@chakra-ui/core";
 
-export default function CartItem() {
+// @ts-ignore
+export default function CartItem({ name, price, image }) {
   return (
     <>
       <Divider my='6' borderColor='black' />
@@ -19,10 +20,7 @@ export default function CartItem() {
         flexDirection={{ base: "column", sm: "row" }}
         bg='#f5f5f5'
       >
-        <Image
-          w={{ base: "70px", sm: "100px", lg: "120px" }}
-          src='https://images.asos-media.com/products/burton-menswear-smart-shorts-with-grey-check/20210711-1-grey'
-        />
+        <Image w={{ base: "70px", sm: "100px", lg: "120px" }} src={image} />
         <Box
           d='flex'
           flexDir='column'
@@ -45,11 +43,11 @@ export default function CartItem() {
             alignSelf='flex-end'
             justifySelf='flex-start'
           />
-          <Text fontWeight='bold'>$45 </Text>
+          <Text fontWeight='bold'>${price} </Text>
           <Text mt='3' mb='1'>
-            Burton Menswear smart shorts with grey check
+            {name}
           </Text>
-          <Flex mt='3'>
+          {/* <Flex mt='3'>
             <Select mr='2' size='sm' w='100px' px='2' placeholder='Color:'>
               <option value='option1'>Option 1</option>
               <option value='option2'>Option 2</option>
@@ -60,7 +58,7 @@ export default function CartItem() {
               <option value='option2'>Option 2</option>
               <option value='option3'>Option 3</option>
             </Select>
-          </Flex>
+          </Flex> */}
         </Box>
       </Flex>
     </>

@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Carousel from "react-elastic-carousel";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import { useParams } from "react-router-dom";
+import ReactLoading from "react-loading";
+import { useForm } from "react-hook-form";
+import { AuthContext } from "../App";
 
 import {
   Heading,
@@ -13,9 +16,14 @@ import {
   Flex,
   Select,
   Divider,
+  FormControl,
+  FormLabel,
+  Input,
+  useToast,
+  FormErrorMessage,
 } from "@chakra-ui/core";
-import { BaseContainer, ProductCard } from "../components";
-import EmptyPage from "./EmptyPage";
+import { BaseContainer, ProductCard, Loader, EmptyPage } from "../components";
+import Toast from "../components/Toast";
 
 const GET_PRODUCT = gql`
   query getProduct($slug: String!) {
@@ -39,19 +47,49 @@ const GET_PRODUCT = gql`
 `;
 
 export default function Product() {
+  const toast = useToast();
+
+  // @ts-ignore
+  const setLoadCart = useContext(AuthContext).setLoadCart;
   let { slug } = useParams();
+
+  const { register, handleSubmit, errors } = useForm();
 
   const { loading, error, data } = useQuery(GET_PRODUCT, {
     variables: { slug: slug },
   });
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
   if (error) {
-    console.error(error);
     return <EmptyPage />;
   }
+
+  // @ts-ignore
+  const addToCart = (values) => {
+    // @ts-ignore
+    const cart = JSON.parse(localStorage.getItem("cart"));
+    // @ts-ignore
+    const thingsForCart = {
+      id: data.product.id,
+      name: data.product.name,
+      image: data.product.images[0],
+      price: data.product.salePrice,
+      color: values.colors,
+      size: values.sizes,
+    };
+    if (!cart) {
+      localStorage.setItem("cart", JSON.stringify([thingsForCart]));
+    } else {
+      cart.push(thingsForCart);
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+    setLoadCart(false);
+    setLoadCart(true);
+
+    Toast(toast, "Added to cart.", "success", "Checkout now.");
+  };
 
   return (
     <Box bg='#f5f5f5' color='black' p={{ base: 3, lg: 8 }}>
@@ -80,24 +118,44 @@ export default function Product() {
             <Text my='6' fontWeight='bold'>
               €{data.product.salePrice}
             </Text>
-            <Select mt='4' placeholder='Select Color'>
-              {data.product.colors.map((color: any) => (
-                <option key={color} value={color}>
-                  {color}
-                </option>
-              ))}
-            </Select>
-            <Select mt='4' placeholder='Select size'>
-              {data.product.sizes.map((size: any) => (
-                <option key={size} value={size}>
-                  {size}
-                </option>
-              ))}
-            </Select>
+            <form style={{ width: "100%" }} onSubmit={handleSubmit(addToCart)}>
+              <FormControl isInvalid={errors.colors}>
+                <Select
+                  mt='4'
+                  placeholder='Select Color'
+                  ref={register({ required: "Color is Required" })}
+                  name='colors'
+                >
+                  {data.product.colors.map((color: any) => (
+                    <option key={color} value={color}>
+                      {color}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormErrorMessage>{errors}</FormErrorMessage>
+              <FormControl isInvalid={errors.sizes}>
+                <Select
+                  mt='4'
+                  placeholder='Select size'
+                  ref={register({ required: "Size is Required" })}
+                  name='sizes'
+                >
+                  {data.product.sizes.map((size: any) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormErrorMessage>
+                {errors.sizes && errors.sizes.message}
+              </FormErrorMessage>
 
-            <Button mt='6' variantColor='green'>
-              Add to cart
-            </Button>
+              <Button mt='6' type='submit' variantColor='green'>
+                Add to cart
+              </Button>
+            </form>
           </Flex>
         </Flex>
       </BaseContainer>

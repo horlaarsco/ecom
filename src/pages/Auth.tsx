@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import {
   Tabs,
@@ -10,8 +10,11 @@ import {
   Link,
 } from "@chakra-ui/core";
 import { Signup, Login } from "../components";
+import { AuthContext } from "../App";
 
 export default function Auth() {
+  const LoggedInStatus = useContext(AuthContext);
+
   const [tabIndex, setTabIndex] = useState(0);
 
   return (

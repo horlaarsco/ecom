@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { gql } from "apollo-boost";
 import { useMutation } from "@apollo/react-hooks";
 import {
@@ -14,9 +14,17 @@ import {
   Textarea,
   Input,
 } from "@chakra-ui/core";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useHistory,
+  Redirect,
+} from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { BaseContainer } from "../../components";
+import { AuthContext } from "../../App";
 
 const ADD_BRAND = gql`
   mutation($data: BrandInput) {
@@ -30,7 +38,17 @@ const ADD_BRAND = gql`
 `;
 
 export default function AddBrand() {
+  let history = useHistory();
+
   const toast = useToast();
+
+  useEffect(() => {
+    // @ts-ignore
+    const token = JSON.parse(localStorage.getItem("token"));
+    if (token.role === "user") {
+      history.push("/");
+    }
+  }, []);
 
   const { handleSubmit, register, errors } = useForm();
   const [image, setImage] = useState("");

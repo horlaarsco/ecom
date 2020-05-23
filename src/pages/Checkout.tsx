@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   Flex,
   Heading,
@@ -11,10 +11,40 @@ import {
   FormLabel,
   Input,
 } from "@chakra-ui/core";
+import { useHistory } from "react-router-dom";
+
+import { AuthContext } from "../App";
+import Toast from "../components/Toast";
+import CartSmallCard from "../components/CartSmallCard";
 
 import { BaseContainer } from "../components";
 
 export default function Checkout() {
+  let history = useHistory();
+
+  const { setLoadCart, loadCart, loggedIn } = useContext(AuthContext);
+
+  const [cart, setCart] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  // @ts-ignore
+  let totalcart = 0;
+
+  useEffect(() => {
+    // @ts-ignore
+    setCart(JSON.parse(localStorage.getItem("cart")));
+  }, [loadCart]);
+
+  useEffect(() => {
+    if (cart) {
+      cart.map((item) => {
+        // @ts-ignore
+        totalcart += item.price;
+        // @ts-ignore
+      });
+    }
+    // @ts-ignore
+    setTotalPrice(totalcart);
+  }, [cart]);
   return (
     <Box bg='#f5f5f5'>
       <BaseContainer
@@ -131,44 +161,39 @@ export default function Checkout() {
             fontSize='lg'
             letterSpacing='widest'
           >
-            2 ITEMS <Text fontSize='md'> Edit</Text>
+            {/* 
+// @ts-ignore */}
+            {cart === null ? 0 : cart.length} ITEMS
+            <Text fontSize='md'> Edit</Text>
           </Heading>
           <Divider borderColor='black' />
-          <Flex mt='4' p='4' bg='#F7F7F7'>
-            <Image
-              w='100px'
-              src='https://images.asos-media.com/products/burton-menswear-smart-shorts-with-grey-check/20210711-1-grey'
-            />
-            <Box ml='3' fontSize='xs'>
-              <Text>$45 </Text>
-              <Text mt='3' mb='1'>
-                Burton Menswear smart shorts with grey check
-              </Text>
-              <Flex justify='space-between'>
-                <Text>Grey </Text>
-                <Text>Qty: 1</Text>
-              </Flex>
-            </Box>
-          </Flex>
-          <Flex mt='4' p='4' bg='#F7F7F7'>
-            <Image
-              w='100px'
-              src='https://images.asos-media.com/products/burton-menswear-smart-shorts-with-grey-check/20210711-1-grey'
-            />
-            <Box ml='3' fontSize='xs'>
-              <Text>$45 </Text>
-              <Text mt='3' mb='1'>
-                Burton Menswear smart shorts with grey check
-              </Text>
-              <Flex justify='space-between'>
-                <Text>Grey </Text>
-                <Text>Qty: 1</Text>
-              </Flex>
-            </Box>
-          </Flex>
-          <Button mt='4' variantColor='green'>
-            Checkout
-          </Button>
+          <Box maxH='500px' overflow='scroll'>
+            {cart &&
+              cart.map((item: any, index) => (
+                <CartSmallCard
+                  key={index}
+                  image={item.image}
+                  name={item.name}
+                  color={item.color}
+                  size={item.size}
+                  price={item.price}
+                />
+              ))}
+          </Box>
+
+          {loggedIn ? (
+            <Button mt='4' variantColor='green'>
+              Checkout
+            </Button>
+          ) : (
+            <Button
+              mt='4'
+              variantColor='dark'
+              onClick={() => history.push("/auth")}
+            >
+              Login
+            </Button>
+          )}
           <Flex
             mt={{ base: "6", lg: "10" }}
             fontSize={{ base: "sm", lg: "md" }}
@@ -177,7 +202,7 @@ export default function Checkout() {
             <Text mr='10' fontWeight='bold'>
               Sub-Total:{" "}
             </Text>
-            <Text>$45 </Text>
+            <Text>${totalPrice} </Text>
           </Flex>
         </Flex>
       </BaseContainer>

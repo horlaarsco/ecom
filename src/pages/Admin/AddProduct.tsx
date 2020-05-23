@@ -47,6 +47,7 @@ const ADD_PRODUCT = gql`
       brand {
         id
         name
+        slug
       }
     }
   }
@@ -66,6 +67,7 @@ export default function AddProduct() {
   let history = useHistory();
 
   const { loading, error, data } = useQuery(GET_BRANDS);
+  // @ts-ignore
 
   const { handleSubmit, register, errors } = useForm();
   // @ts-ignore
@@ -124,7 +126,8 @@ export default function AddProduct() {
       brand,
       category,
       colors,
-      owner: "5ec69a8b3cba5900044f22ca",
+      // @ts-ignore
+      owner: JSON.parse(localStorage.getItem("token")).id,
       images: images,
       description,
     };
@@ -134,8 +137,8 @@ export default function AddProduct() {
       });
       // @ts-ignore
       console.log(Newdata.data.addProduct.slug);
-
-      history.push(`/product/${Newdata.data.addProduct.slug}`);
+      // @ts-ignore
+      window.location = `/product/${Newdata.data.addProduct.slug}`;
 
       toast({
         position: "bottom-right",

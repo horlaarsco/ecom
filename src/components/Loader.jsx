@@ -1,44 +1,13 @@
 import React from "react";
-import { Image } from "@chakra-ui/core";
+import { Flex, Box } from "@chakra-ui/core";
+import ReactLoading from "react-loading";
 
-const _loaded = {};
-
-class ImageLoader extends React.Component {
-  //initial state: image loaded stage
-  state = {
-    loaded: _loaded[this.props.src],
-  };
-
-  //define our loading and loaded image classes
-  static defaultProps = {
-    className: "",
-    loadingClassName: "img-loading",
-    loadedClassName: "img-loaded",
-  };
-
-  //image onLoad handler to update state to loaded
-  onLoad = () => {
-    _loaded[this.props.src] = true;
-    this.setState(() => ({ loaded: true }));
-  };
-
-  render() {
-    let { className, loadedClassName, loadingClassName, ...props } = this.props;
-
-    className = `${className} ${
-      this.state.loaded ? loadedClassName : loadingClassName
-    }`;
-
-    return (
-      <Image
-        w='auto'
-        src={this.props.src}
-        onClick={this.props.onClick}
-        className={className}
-        onLoad={this.onLoad}
-      />
-    );
-  }
+export default function Loader() {
+  return (
+    <Flex h='60vh' align='center' p='24' w='full' justify='center'>
+      <Box height='auto' width={["40%", "35%", "25%", "15%", "10%"]} mx='0'>
+        <ReactLoading type='spokes' color='black' height='100%' width='100%' />
+      </Box>
+    </Flex>
+  );
 }
-
-export default ImageLoader;

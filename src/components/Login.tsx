@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/react-hooks";
 
@@ -20,23 +20,34 @@ import { passwordValidator } from "../utils/validations";
 import FormType from "./FormControl";
 import Toast from "./Toast";
 import { LOG_IN } from "../utils/queries";
+import { AuthContext } from "../App";
 
 export default function Login() {
   let history = useHistory();
 
   const toast = useToast();
   const [loginUser, { loading }] = useMutation(LOG_IN);
+  const LoggedInStatus: any = useContext(AuthContext);
 
   const { handleSubmit, register, errors, watch } = useForm();
 
   // @ts-ignore
 
   const onSubmit = async (values) => {
-    console.log(values);
+    values.user = values.user.toLowerCase();
 
     try {
       const Newdata = await loginUser({ variables: { data: { ...values } } });
-      console.log(Newdata);
+      if (Newdata.data.loginUser.role === "seller") {
+        LoggedInStatus.setAdmin(true);
+      }
+      const toSave = {
+        id: Newdata.data.loginUser.id,
+        token: Newdata.data.loginUser.token,
+      };
+      localStorage.setItem("token", JSON.stringify(toSave));
+      LoggedInStatus.setLogged(true);
+
       history.push("/");
 
       Toast(toast, "Login Sucessfull", "success", "Welcome to E-COM.");
@@ -73,7 +84,7 @@ export default function Login() {
             id='user'
             name='user'
             ref={register({
-              // required: "Email or Username is Required",
+              required: "Email or Username is Required",
             })}
           />
           <FormErrorMessage>

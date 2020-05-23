@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Flex,
   Heading,
@@ -7,16 +7,50 @@ import {
   Text,
   Image,
   Button,
+  useToast,
 } from "@chakra-ui/core";
 import { BsPerson } from "react-icons/bs";
-import { MdFavoriteBorder } from "react-icons/md";
-import { FiShoppingCart } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { FiShoppingCart, FiLogOut } from "react-icons/fi";
+import { Link, useHistory } from "react-router-dom";
 
 import BaseContainer from "./BaseContainer";
+import { gql } from "apollo-boost";
+import { useMutation } from "@apollo/react-hooks";
+import { AuthContext } from "../App";
+import Toast from "./Toast";
+import CartSmallCard from "./CartSmallCard";
+
+const LOG_OUT = gql`
+  mutation Logout($type: ID) {
+    logout(id: $type) {
+      firstName
+      lastName
+      email
+      password
+      role
+      username
+      password
+      updatedAt
+      createdAt
+      verified
+      id
+      token
+    }
+  }
+`;
 
 export default function Header() {
+  const toast = useToast();
+  let history = useHistory();
+
+  const LoggedInStatus: any = useContext(AuthContext);
+  const { setLoadCart, loadCart } = useContext(AuthContext);
+
   const [cartVisibility, setCartVisibility] = useState("none");
+  const [cart, setCart] = useState([]);
+
+  const [logout, { loading }] = useMutation(LOG_OUT);
+
   const changeCartVisiblity = () => {
     if (cartVisibility === "none") {
       setCartVisibility("block");
@@ -24,6 +58,42 @@ export default function Header() {
       setCartVisibility("none");
     }
   };
+
+  const logoutclick = async () => {
+    // @ts-ignore
+    const token = await JSON.parse(localStorage.getItem("token"));
+    if (token) {
+      await logout({
+        variables: { type: token.id },
+      });
+      // @ts-ignore
+      localStorage.clear();
+      Toast(toast, "Logged Out.", "success", "");
+
+      LoggedInStatus.setLoggedIn(false);
+      history.push("/");
+    }
+  };
+  const [totalPrice, setTotalPrice] = useState(0);
+  // @ts-ignore
+  let totalcart = 0;
+
+  useEffect(() => {
+    // @ts-ignore
+    setCart(JSON.parse(localStorage.getItem("cart")));
+  }, [loadCart]);
+
+  useEffect(() => {
+    if (cart) {
+      cart.map((item) => {
+        // @ts-ignore
+        totalcart += item.price;
+        // @ts-ignore
+      });
+    }
+    // @ts-ignore
+    setTotalPrice(totalcart);
+  }, [cart]);
 
   return (
     <Box bg='black'>
@@ -73,16 +143,19 @@ export default function Header() {
                 size={{ base: "20px", sm: "30px" }}
                 color='white'
                 as={BsPerson}
+                mx={{ base: 3, sm: "5" }}
               />
             </Link>
-
-            <Box
-              size={{ base: "20px", sm: "30px" }}
-              color='white'
-              mx={{ base: 3, sm: "5" }}
-              as={MdFavoriteBorder}
-            />
-
+            {LoggedInStatus.loggedIn && (
+              <Box
+                size={{ base: "20px", sm: "30px" }}
+                color='white'
+                mr={{ base: 3, sm: "5" }}
+                as={FiLogOut}
+                onClick={logoutclick}
+                cursor='pointer'
+              />
+            )}
             <Flex
               d={{ base: "none", md: "block" }}
               onMouseEnter={changeCartVisiblity}
@@ -113,28 +186,27 @@ export default function Header() {
                 <Text p='4' d='inline-flex' fontWeight='bold'>
                   Cart,{" "}
                   <Box as='span' ml='1' fontWeight='normal'>
-                    1 items
+                    {/* 
+// @ts-ignore */}
+                    {cart === null ? 0 : cart.length} items
                   </Box>
                 </Text>
-                <Flex p='4' bg='#F7F7F7'>
-                  <Image
-                    w='100px'
-                    src='https://images.asos-media.com/products/burton-menswear-smart-shorts-with-grey-check/20210711-1-grey'
-                  />
-                  <Box ml='3' fontSize='xs'>
-                    <Text>$45 </Text>
-                    <Text mt='3' mb='1'>
-                      Burton Menswear smart shorts with grey check
-                    </Text>
-                    <Flex justify='space-between'>
-                      <Text>Grey </Text>
-                      <Text>Qty: 1</Text>
-                    </Flex>
-                  </Box>
-                </Flex>
+                <Box maxH='280px' overflow='scroll'>
+                  {cart &&
+                    cart.map((item: any, index) => (
+                      <CartSmallCard
+                        key={index}
+                        image={item.image}
+                        name={item.name}
+                        color={item.color}
+                        size={item.size}
+                        price={item.price}
+                      />
+                    ))}
+                </Box>
                 <Flex p='3' fontSize='sm' justify='space-between'>
                   <Text>Sub-Total: </Text>
-                  <Text>$45 </Text>
+                  <Text>${totalPrice} </Text>
                 </Flex>
                 <Flex p='4' bg='#f5f5f5' justify='space-between'>
                   <Link to='/cart'>

@@ -7,6 +7,7 @@ import Brand from "./Brand";
 import Product from "./Product";
 import AddProduct from "./Admin/AddProduct";
 import AddBrand from "./Admin/AddBrand";
+import Profile from "./Profile";
 
 export {
   Home,
@@ -18,4 +19,5 @@ export {
   Product,
   AddProduct,
   AddBrand,
+  Profile,
 };

@@ -1,17 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BaseContainer } from "../components";
+import BaseContainer from "./BaseContainer";
 
-import {
-  Heading,
-  Text,
-  Box,
-  Image,
-  Button,
-  Flex,
-  Select,
-  Divider,
-} from "@chakra-ui/core";
+import { Heading, Text, Box, Button } from "@chakra-ui/core";
 
 export default function EmptyPage() {
   return (

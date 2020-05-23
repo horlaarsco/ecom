@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { BaseContainer, ProductCard } from "../components";
-import { useQuery, useLazyQuery } from "@apollo/react-hooks";
+import { BaseContainer, ProductCard, Loader, EmptyPage } from "../components";
+import { useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
+import ReactLoading from "react-loading";
 
 import {
   SimpleGrid,
@@ -13,7 +14,6 @@ import {
   Button,
   Flex,
 } from "@chakra-ui/core";
-import EmptyPage from "./EmptyPage";
 import { Product } from ".";
 
 // @ts-ignore
@@ -30,6 +30,7 @@ const GET_BRAND = gql`
         price
         slug
         images
+        salePrice
       }
     }
   }
@@ -43,10 +44,9 @@ export default function Brand() {
   });
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
   if (error) {
-    console.error(error);
     return <EmptyPage />;
   }
 
@@ -76,17 +76,20 @@ export default function Brand() {
         </BaseContainer>
       </Box>
       <BaseContainer mt='6'>
-        <SimpleGrid columns={[2, 3, 4, 5]} spacing={5}>
-          {data.brand.products.map((product: any) => (
-            <ProductCard
-              key={product.slug}
-              name={product.name}
-              brand={slug}
-              price={product.price}
-              slug={product.slug}
-              image={product.images[0]}
-            />
-          ))}
+        <SimpleGrid columns={[2, 3, 4]} spacing={8}>
+          {data.brand.products
+            .map((product: any) => (
+              <ProductCard
+                key={product.slug}
+                name={product.name}
+                brand={slug}
+                price={product.price}
+                slug={product.slug}
+                image={product.images[0]}
+                salePrice={product.salePrice}
+              />
+            ))
+            .reverse()}
         </SimpleGrid>
         <Flex justify='center'>
           <Button

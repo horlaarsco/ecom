@@ -1,12 +1,13 @@
 import React from "react";
-import { Flex, Heading, Text, Divider, Button } from "@chakra-ui/core";
+import { Flex, Heading, Text, Divider, Button, Box } from "@chakra-ui/core";
 import { Link } from "react-router-dom";
-import { useQuery, useLazyQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
+import ReactLoading from "react-loading";
 
 import { BaseContainer, Brand } from "../components";
 import Carousel from "react-elastic-carousel";
-import EmptyPage from "./EmptyPage";
+import EmptyPage from "../components/EmptyPage";
 
 const GET_BRANDS = gql`
   query {
@@ -23,7 +24,18 @@ function Home() {
   const { loading, error, data } = useQuery(GET_BRANDS);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Flex h='60vh' align='center' p='24' w='full' justify='center'>
+        <Box height='auto' width='10%' mx='0'>
+          <ReactLoading
+            type='spokes'
+            color='black'
+            height='100%'
+            width='100%'
+          />
+        </Box>
+      </Flex>
+    );
   }
   if (error) {
     console.error(error);
@@ -124,14 +136,16 @@ function Home() {
             breakPoints={breakPoints}
             disableArrowsOnEnd={false}
           >
-            {data.brands.map((brand: any) => (
-              <Brand
-                key={brand.id}
-                image={brand.image}
-                name={brand.name}
-                slug={brand.slug}
-              />
-            ))}
+            {data.brands
+              .map((brand: any) => (
+                <Brand
+                  key={brand.id}
+                  image={brand.image}
+                  name={brand.name}
+                  slug={brand.slug}
+                />
+              ))
+              .reverse()}
           </Carousel>
         </BaseContainer>
       )}

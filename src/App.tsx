@@ -1,22 +1,9 @@
-import React, { useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useLocation,
-} from "react-router-dom";
-import { Header, Footer } from "./components";
-import {
-  Home,
-  Auth,
-  Cart,
-  Checkout,
-  Gender,
-  Brand,
-  Product,
-  AddProduct,
-  AddBrand,
-} from "./pages";
+import React, { useEffect, useContext } from "react";
+import { BrowserRouter, useLocation } from "react-router-dom";
+import { Header, Footer, Router, Loader, EmptyPage } from "./components";
+
+import { useMutation } from "@apollo/react-hooks";
+import { CHECK_LOG_IN } from "./utils/queries";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -27,49 +14,67 @@ function ScrollToTop() {
 
   return null;
 }
+// @ts-ignore
+export const AuthContext = React.createContext();
 
 function App() {
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [isAdmin, setAdmin] = React.useState(false);
+  const [loadCart, setLoadCart] = React.useState(true);
+  const [loading, setLoading] = React.useState(true);
+
+  const LoggedInStatus: any = useContext(AuthContext);
+  // @ts-ignore
+  const [verifylogin, { newww }] = useMutation(CHECK_LOG_IN);
+
+  const verifyiflogin = async () => {
+    // @ts-ignore
+    const token = await JSON.parse(localStorage.getItem("token"));
+    if (token) {
+      const user = await verifylogin({
+        variables: { type: token.id },
+      });
+
+      if (user) {
+        // @ts-ignore
+        if (user.data.verifylogin.role === "seller") {
+          setLoggedIn(true);
+          setAdmin(true);
+          setLoading(false);
+        }
+        setLoggedIn(true);
+        setLoading(false);
+      }
+    } else {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    verifyiflogin();
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
-    <>
-      <Router>
+    <AuthContext.Provider
+      value={{
+        loggedIn,
+        setLoggedIn,
+        isAdmin,
+        setAdmin,
+        loadCart,
+        setLoadCart,
+      }}
+    >
+      <BrowserRouter>
         <ScrollToTop />
         <Header />
-        <Switch>
-          <Route path='/admin/add-product'>
-            <AddProduct />
-          </Route>
-          <Route path='/admin/add-brand'>
-            <AddBrand />
-          </Route>
-
-          <Route path='/auth'>
-            <Auth />
-          </Route>
-          <Route path='/cart'>
-            <Cart />
-          </Route>
-          <Route path='/product/:slug'>
-            <Product />
-          </Route>
-          <Route path='/brand/:slug'>
-            <Brand />
-          </Route>
-          <Route path='/checkout'>
-            <Checkout />
-          </Route>
-          <Route path='/men'>
-            <Gender gender='Men' />
-          </Route>
-          <Route path='/women'>
-            <Gender gender='Women' />
-          </Route>
-          <Route path='/'>
-            <Home />
-          </Route>
-        </Switch>
+        <Router />
         <Footer />
-      </Router>
-    </>
+      </BrowserRouter>
+    </AuthContext.Provider>
   );
 }
 
