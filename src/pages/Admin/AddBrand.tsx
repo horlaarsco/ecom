@@ -82,6 +82,11 @@ export default function AddBrand() {
       });
     }
   };
+  // @ts-ignore
+  const handleClick = (event) => {
+    // @ts-ignore
+    document.getElementById("image").click();
+  };
 
   const removeImage = () => {
     setFile([]);
@@ -128,14 +133,24 @@ export default function AddBrand() {
               </FormErrorMessage>
             </FormControl>
             <FormControl mt='3' mb='5'>
-              <FormLabel>Upload Images</FormLabel>
-              <Input
-                h='auto'
-                p='4'
-                type='file'
-                id='image'
-                onChange={uploadImage}
-              />
+              <FormLabel mt='3' d='block'>
+                Add brand image
+              </FormLabel>
+              <>
+                <Button mt='3' onClick={handleClick}>
+                  Choose Image{" "}
+                </Button>
+
+                <Input
+                  accept='image/x-png,image/gif,image/jpeg'
+                  style={{ display: "none" }}
+                  h='auto'
+                  p='4'
+                  type='file'
+                  id='image'
+                  onChange={uploadImage}
+                />
+              </>
 
               <Text color='#FF0000' fontSize='sm'>
                 {imageerror}
