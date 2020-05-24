@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { gql } from "apollo-boost";
 import { useMutation, useQuery } from "@apollo/react-hooks";
@@ -20,10 +20,16 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
+  IconButton,
 } from "@chakra-ui/core";
 import Carousel, { consts } from "react-elastic-carousel";
 import { BaseContainer, Color } from "../../components";
 import Sizes from "../../components/Sizes";
+
+// @ts-ignore
+// type EventHandlerProps = {
+//   onClick: (e: React.MouseEvent) => void;
+// };
 
 const ADD_PRODUCT = gql`
   mutation($data: ProductInput) {
@@ -65,6 +71,7 @@ const GET_BRANDS = gql`
 export default function AddProduct() {
   const toast = useToast();
   let history = useHistory();
+  const [newLoading, setLoading] = useState(false);
 
   const { loading, error, data } = useQuery(GET_BRANDS);
   // @ts-ignore
@@ -79,30 +86,46 @@ export default function AddProduct() {
   const [colorerror, setcolorerror] = useState("");
   const [imageerror, setimageerror] = useState("");
   const [image, setImage] = useState([]);
-  const [brand, setBrand] = useState();
-  const [category, setCategory] = useState();
-  const [description, setDescription] = useState();
+  const [imageURL, setImageURL] = useState([]);
+  const [localFile, setLocalFile] = useState([]);
 
-  const uploadImage = async (e: any) => {
-    setimageerror("");
-    const files = e.target.files;
-    const data = new FormData();
-    data.append("file", files[0]);
-    data.append("upload_preset", "horlars");
-    const res = await fetch(
-      "	https://api.cloudinary.com/v1_1/horlaarsco/image/upload",
-      {
-        method: "POST",
-        body: data,
-      }
-    );
-    const newfile = await res.json();
-    const imageDetails = { url: newfile.secure_url, key: newfile.created_at };
+  const images: Array<string> = [];
+  const uploadImage = (e: any) => {
     // @ts-ignore
-    setImage([...image, imageDetails]);
+    setImage([...image, ...e.target.files]);
+    // @ts-ignore
+    Object.values(e.target.files).map((file) => {
+      images.push(URL.createObjectURL(file));
+    });
+    // @ts-ignore
+    setLocalFile(localFile.concat(images));
   };
 
   const onSubmit = async (values: any) => {
+    setLoading(true);
+
+    if (image === undefined || image.length === 0) {
+      setimageerror("At least one image is required");
+      return;
+    }
+    let urlimages = await Promise.all(
+      image.map(async (photo) => {
+        const data = new FormData();
+        data.append("file", photo);
+        data.append("upload_preset", "ecom_api");
+        const res = await fetch(
+          "	https://api.cloudinary.com/v1_1/horlaarsco/image/upload",
+          {
+            method: "POST",
+            body: data,
+          }
+        );
+        const { secure_url } = await res.json();
+        // @ts-ignore
+        return secure_url;
+      })
+    );
+
     if (sizes === undefined || sizes.length === 0) {
       setsizeerror("Size is required");
       return;
@@ -111,47 +134,28 @@ export default function AddProduct() {
       setcolorerror("Color is required");
       return;
     }
-    if (image === undefined || image.length === 0) {
-      setimageerror("At least one image is required");
-      return;
-    }
 
-    const images = image.map((item: any) => item.url);
-    const valuesToSubmit = {
+    const valuesToSubmit = await {
       ...values,
       price: parseInt(values.price),
       salePrice: parseInt(values.salePrice),
       quantity: parseInt(values.quantity),
-      sizes,
-      brand,
-      category,
       colors,
       // @ts-ignore
       owner: JSON.parse(localStorage.getItem("token")).id,
-      images: images,
-      description,
+      images: urlimages,
     };
     try {
       const Newdata = await addProduct({
         variables: { data: { ...valuesToSubmit } },
       });
       // @ts-ignore
-      console.log(Newdata.data.addProduct.slug);
-      // @ts-ignore
       window.location = `/product/${Newdata.data.addProduct.slug}`;
-
-      toast({
-        position: "bottom-right",
-        title: "Product Added.",
-        description: "Added.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
     } catch (error) {
+      setLoading(false);
       let newError = "";
       if (error.message.includes("Duplicate")) {
-        newError = "Email or Username already exist";
+        newError = "Product already exist";
       } else if (error.message.includes("Required")) {
         newError = "Fill all required fields";
       } else {
@@ -168,18 +172,24 @@ export default function AddProduct() {
       });
     }
   };
-
-  const handleBrand = (e: any) => {
-    setBrand(e.target.value);
+  // @ts-ignore
+  const handleClick = (event) => {
+    // @ts-ignore
+    document.getElementById("image").click();
   };
 
-  const handleCategory = (e: any) => {
-    setCategory(e.target.value);
-  };
+  function handleRemove(index: number) {
+    // @ts-ignore
+    let newArray: Array<string> = localFile;
+    let newUploadArray: Array<string> = image;
 
-  const handleDescription = (e: any) => {
-    setDescription(e.target.value);
-  };
+    newUploadArray.splice(index, 1);
+    // @ts-ignore
+    setImage([...newUploadArray]);
+    newArray.splice(index, 1);
+    // @ts-ignore
+    setLocalFile([...newArray]);
+  }
 
   if (loading) {
     return <div>Loading...</div>;
@@ -196,12 +206,15 @@ export default function AddProduct() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Flex bg='white' w='100%' m='4'>
             <Flex flexDir='column' w='30%' p='6'>
-              <FormControl my='3'>
+              <FormControl my='3' isInvalid={errors.brand}>
                 <FormLabel>Brand</FormLabel>
+
                 <Select
                   name='brand'
                   placeholder='Select Brand'
-                  onChange={handleBrand}
+                  ref={register({
+                    required: "Brand is Required",
+                  })}
                 >
                   {data.brands.map((brand: any, index: number) => (
                     <option key={index} value={brand.id}>
@@ -209,37 +222,76 @@ export default function AddProduct() {
                     </option>
                   ))}
                 </Select>
+                <FormErrorMessage>
+                  {errors.brand && errors.brand.message}
+                </FormErrorMessage>
               </FormControl>
-              <FormControl my='3'>
+              <FormControl my='3' isInvalid={errors.category}>
                 <FormLabel>Category</FormLabel>
-                <Select placeholder='Select Category' onChange={handleCategory}>
+                <Select
+                  placeholder='Select Category'
+                  name='category'
+                  ref={register({
+                    required: "Category is Required",
+                  })}
+                >
                   <option value='Male'>Male</option>
                   <option value='Female'>Female</option>
                   <option value='Unisex'>Unisex</option>
                 </Select>
+                <FormErrorMessage>
+                  {errors.category && errors.category.message}
+                </FormErrorMessage>
               </FormControl>
               <FormControl mt='3' mb='5'>
                 <FormLabel>Upload Images</FormLabel>
-                <Input
-                  h='auto'
-                  p='4'
-                  type='file'
-                  id='image'
-                  onChange={uploadImage}
-                />
+                <>
+                  <Button mt='3' onClick={handleClick}>
+                    Choose Image{" "}
+                  </Button>
+
+                  <Input
+                    accept='image/x-png,image/gif,image/jpeg'
+                    style={{ display: "none" }}
+                    h='auto'
+                    p='4'
+                    type='file'
+                    id='image'
+                    onChange={uploadImage}
+                    multiple
+                  />
+                </>
+
                 <Text color='#FF0000' fontSize='sm'>
                   {imageerror}
                 </Text>
               </FormControl>
-              <Carousel
-                breakPoints={breakPoints}
-                disableArrowsOnEnd={false}
-                renderArrow={myArrow}
-              >
-                {image.map((photo: any) => (
-                  <Image key={photo.key} src={photo.url} />
-                ))}
-              </Carousel>
+              {localFile.length > 0 ? (
+                <Carousel
+                  breakPoints={breakPoints}
+                  disableArrowsOnEnd={false}
+                  renderArrow={myArrow}
+                >
+                  {localFile.map((photo, index) => (
+                    <Box key={index} pos='relative'>
+                      <Image src={photo} />
+                      <IconButton
+                        // @ts-ignore
+                        onClick={() => handleRemove(index)}
+                        size='sm'
+                        pos='absolute'
+                        right='0'
+                        top='0'
+                        variantColor='red'
+                        aria-label=''
+                        icon='small-close'
+                      />
+                    </Box>
+                  ))}
+                </Carousel>
+              ) : (
+                <Box></Box>
+              )}
             </Flex>
             <Flex flexDir='column' flex='1' p='6'>
               <FormControl my='3' isInvalid={errors.name}>
@@ -336,7 +388,9 @@ export default function AddProduct() {
                   flex='1'
                   h='full'
                   placeholder='Enter Description'
-                  onChange={handleDescription}
+                  ref={register({
+                    required: "Description is Required",
+                  })}
                 />
                 <FormErrorMessage>
                   {errors.description && errors.description.message}
@@ -349,7 +403,7 @@ export default function AddProduct() {
                 type='submit'
                 border='1px solid #eee'
                 variantColor='dark'
-                isLoading={Addloading}
+                isLoading={newLoading}
               >
                 Add Product
               </Button>
@@ -365,11 +419,23 @@ const breakPoints = [{ width: 1, itemsToShow: 1 }];
 
 // @ts-ignore
 function myArrow({ type, onClick, isEdge }) {
-  const pointer = type === consts.PREV ? "<" : ">";
+  const pointer =
+    type === consts.PREV ? (
+      <img src='https://img.icons8.com/metro/26/000000/previous.png' />
+    ) : (
+      <img src='https://img.icons8.com/metro/26/000000/next.png' />
+    );
   return (
     // @ts-ignore
-    <button onClick={onClick} disabled={isEdge}>
+    <button
+      type='button'
+      className='button'
+      onClick={onClick}
+      disabled={isEdge}
+    >
       {pointer}
     </button>
   );
 }
+
+// index: number

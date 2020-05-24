@@ -22,7 +22,7 @@ export default function AddBrand() {
   const toast = useToast();
 
   const [localFile, setLocalFile] = useState("");
-  const [filee, setFile] = useState([]);
+  const [image, setImage] = useState([]);
   const { handleSubmit, register, errors } = useForm();
   const [imageerror, setimageerror] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,7 @@ export default function AddBrand() {
 
   const uploadImage = (e: any) => {
     // @ts-ignore
-    setFile([...filee, e.target.files[0]]);
+    setImage([...image, e.target.files[0]]);
     setimageerror("");
     // @ts-ignore
     const file = e.target.files[0];
@@ -40,14 +40,14 @@ export default function AddBrand() {
 
   const onSubmit = async (values: any) => {
     setLoading(true);
-    if (filee.length == 0) {
+    if (image.length == 0) {
       setimageerror("Image is required");
       setLoading(false);
       return;
     }
     const data = new FormData();
-    data.append("file", filee[0]);
-    data.append("upload_preset", "horlars");
+    data.append("file", image[0]);
+    data.append("upload_preset", "ecom_api");
     const res = await fetch(
       "	https://api.cloudinary.com/v1_1/horlaarsco/image/upload",
       {
@@ -89,7 +89,7 @@ export default function AddBrand() {
   };
 
   const removeImage = () => {
-    setFile([]);
+    setImage([]);
     setLocalFile("");
   };
 

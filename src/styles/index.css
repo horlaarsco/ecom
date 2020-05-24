@@ -67,3 +67,13 @@
 .text-center {
   text-align: center;
 }
+
+.button,
+.button:hover,
+.button:active,
+.button:active:focus,
+.button:visited,
+.button:focus {
+  color: #dcdcdc;
+  outline: none;
+}

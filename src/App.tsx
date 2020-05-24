@@ -56,7 +56,6 @@ function App() {
     }
   };
   useEffect(() => {
-    console.log(process.env.REACT_APP_APOLLO);
     verifyiflogin();
   }, []);
 

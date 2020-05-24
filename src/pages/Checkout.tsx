@@ -48,7 +48,6 @@ export default function Checkout() {
     const data = { ...values, owner: profileId, products: productId };
     try {
       const Newdata = await addOrder({ variables: { data: { ...data } } });
-      history.push("/");
       Toast(toast, "Order created.", "success", "");
       localStorage.removeItem("cart");
       setLoadCart(!loadCart);
