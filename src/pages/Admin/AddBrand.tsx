@@ -13,36 +13,40 @@ import {
   Textarea,
   Input,
 } from "@chakra-ui/core";
-import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { BaseContainer } from "../../components";
 import { ADD_BRAND } from "../../utils/queries";
 
 export default function AddBrand() {
-  let history = useHistory();
-
   const toast = useToast();
 
-  useEffect(() => {
-    // @ts-ignore
-    const token = JSON.parse(localStorage.getItem("token"));
-    if (token.role === "user") {
-      history.push("/");
-    }
-  }, []);
-
+  const [localFile, setLocalFile] = useState("");
+  const [filee, setFile] = useState([]);
   const { handleSubmit, register, errors } = useForm();
-  const [image, setImage] = useState("");
   const [imageerror, setimageerror] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [addBrand, { loading }] = useMutation(ADD_BRAND);
+  const [addBrand, {}] = useMutation(ADD_BRAND);
 
-  const uploadImage = async (e: any) => {
+  const uploadImage = (e: any) => {
+    // @ts-ignore
+    setFile([...filee, e.target.files[0]]);
     setimageerror("");
-    const files = e.target.files;
+    // @ts-ignore
+    const file = e.target.files[0];
+    setLocalFile(URL.createObjectURL(file));
+  };
+
+  const onSubmit = async (values: any) => {
+    setLoading(true);
+    if (filee.length == 0) {
+      setimageerror("Image is required");
+      setLoading(false);
+      return;
+    }
     const data = new FormData();
-    data.append("file", files[0]);
+    data.append("file", filee[0]);
     data.append("upload_preset", "horlars");
     const res = await fetch(
       "	https://api.cloudinary.com/v1_1/horlaarsco/image/upload",
@@ -51,37 +55,23 @@ export default function AddBrand() {
         body: data,
       }
     );
-    const newfile = await res.json();
-    // @ts-ignore
-    setImage(newfile.secure_url);
-  };
-
-  const onSubmit = async (values: any) => {
-    const valuesToSubmit = {
-      ...values,
-      image,
-    };
-    console.log(valuesToSubmit);
+    const { secure_url } = await res.json();
+    const NewValue = { ...values, image: secure_url };
     try {
       const Newdata = await addBrand({
-        variables: { data: { ...valuesToSubmit } },
+        variables: { data: { ...NewValue } },
       });
-      toast({
-        position: "bottom-right",
-        title: "Brand Added.",
-        description: "Added.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      // @ts-ignore
+      window.location = `/brand/${Newdata.data.addBrand.slug}`;
     } catch (error) {
+      setLoading(false);
+
       let newError = "";
       if (error.message.includes("Duplicate")) {
-        newError = "Email or Username already exist";
+        newError = "Brand already exist";
       } else if (error.message.includes("Required")) {
         newError = "Fill all required fields";
       }
-
       toast({
         position: "bottom-right",
         title: "An error occurred.",
@@ -91,6 +81,11 @@ export default function AddBrand() {
         isClosable: true,
       });
     }
+  };
+
+  const removeImage = () => {
+    setFile([]);
+    setLocalFile("");
   };
 
   return (
@@ -141,12 +136,16 @@ export default function AddBrand() {
                 id='image'
                 onChange={uploadImage}
               />
+
               <Text color='#FF0000' fontSize='sm'>
                 {imageerror}
               </Text>
             </FormControl>
 
-            <Image my='3' w='200px' mx='auto' src={image} />
+            <Image my='3' w='200px' mx='auto' src={localFile} />
+            <Button onClick={removeImage} size='xs' mt='3' variantColor='red'>
+              Remove Image
+            </Button>
             <Button
               size='lg'
               w='100%'

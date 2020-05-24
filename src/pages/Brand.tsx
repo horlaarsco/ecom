@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { BaseContainer, ProductCard, Loader, EmptyPage } from "../components";
 import { useQuery } from "@apollo/react-hooks";
 
@@ -54,37 +54,62 @@ export default function Brand() {
         </BaseContainer>
       </Box>
       <BaseContainer mt='6'>
-        <SimpleGrid columns={[2, 3, 4]} spacing={8}>
-          {data.brand.products
-            .map((product: any) => (
-              <ProductCard
-                key={product.slug}
-                name={product.name}
-                brandName={data.brand.name}
-                brand={slug}
-                price={product.price}
-                slug={product.slug}
-                image={product.images[0]}
-                salePrice={product.salePrice}
-              />
-            ))
-            .reverse()}
-        </SimpleGrid>
-        <Flex justify='center'>
-          <Button
-            mt='4'
-            lineHeight='none'
-            backgroundColor='black'
-            color='white'
-            size='md'
-            height={{ base: "2rem", sm: "3rem" }}
-            fontSize={{ base: "md", sm: "lg" }}
-            _hover={{ color: "white", background: "black" }}
-            _active={{ color: "white", background: "black" }}
-          >
-            Load More
-          </Button>{" "}
-        </Flex>
+        {data.brand.products.length > 0 ? (
+          <>
+            <SimpleGrid columns={[2, 3, 4]} spacing={8}>
+              {data.brand.products
+                .map((product: any) => (
+                  <ProductCard
+                    key={product.slug}
+                    name={product.name}
+                    brandName={data.brand.name}
+                    brand={slug}
+                    price={product.price}
+                    slug={product.slug}
+                    image={product.images[0]}
+                    salePrice={product.salePrice}
+                  />
+                ))
+                .reverse()}
+            </SimpleGrid>
+            <Flex justify='center'>
+              <Button
+                my='4'
+                lineHeight='none'
+                backgroundColor='black'
+                color='white'
+                size='md'
+                height={{ base: "2rem", sm: "3rem" }}
+                fontSize={{ base: "md", sm: "lg" }}
+                _hover={{ color: "white", background: "black" }}
+                _active={{ color: "white", background: "black" }}
+              >
+                Load More
+              </Button>{" "}
+            </Flex>
+          </>
+        ) : (
+          <Link to='/admin/add-product'>
+            <Flex direction='column' align='center' w='full' justify='center'>
+              <Heading fontSize='xl' color='black'>
+                No products yet
+              </Heading>
+              <Button
+                my='4'
+                lineHeight='none'
+                backgroundColor='black'
+                color='white'
+                size='md'
+                height={{ base: "2rem", sm: "3rem" }}
+                fontSize={{ base: "md", sm: "lg" }}
+                _hover={{ color: "white", background: "black" }}
+                _active={{ color: "white", background: "black" }}
+              >
+                Add Product
+              </Button>
+            </Flex>
+          </Link>
+        )}
       </BaseContainer>
     </>
   );
