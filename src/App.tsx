@@ -22,8 +22,8 @@ function App() {
   const [isAdmin, setAdmin] = React.useState(false);
   const [loadCart, setLoadCart] = React.useState(true);
   const [loading, setLoading] = React.useState(true);
+  const [profile, setProfile] = React.useState({});
 
-  const LoggedInStatus: any = useContext(AuthContext);
   // @ts-ignore
   const [verifylogin, { newww }] = useMutation(CHECK_LOG_IN);
 
@@ -31,25 +31,32 @@ function App() {
     // @ts-ignore
     const token = await JSON.parse(localStorage.getItem("token"));
     if (token) {
-      const user = await verifylogin({
-        variables: { type: token.id },
-      });
+      try {
+        const user = await verifylogin({
+          variables: { type: token.id },
+        });
 
-      if (user) {
-        // @ts-ignore
-        if (user.data.verifylogin.role === "seller") {
+        if (user) {
+          if (user.data.verifylogin.role === "seller") {
+            setLoggedIn(true);
+            setAdmin(true);
+            setLoading(false);
+          }
           setLoggedIn(true);
-          setAdmin(true);
+          setProfile(user.data.verifylogin);
           setLoading(false);
+        } else {
+          setLoading(false);
+          setLoggedIn(false);
         }
-        setLoggedIn(true);
+      } catch (error) {
         setLoading(false);
+        setLoggedIn(false);
       }
-    } else {
-      setLoading(false);
     }
   };
   useEffect(() => {
+    console.log(process.env.REACT_APP_APOLLO);
     verifyiflogin();
   }, []);
 
@@ -66,6 +73,7 @@ function App() {
         setAdmin,
         loadCart,
         setLoadCart,
+        profile,
       }}
     >
       <BrowserRouter>

@@ -1,41 +1,18 @@
 import React from "react";
-import { Flex, Heading, Text, Divider, Button, Box } from "@chakra-ui/core";
+import { Flex, Heading, Text, Button, Box } from "@chakra-ui/core";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
-import ReactLoading from "react-loading";
 
-import { BaseContainer, Brand } from "../components";
+import { BaseContainer, Brand, Loader } from "../components";
 import Carousel from "react-elastic-carousel";
 import EmptyPage from "../components/EmptyPage";
-
-const GET_BRANDS = gql`
-  query {
-    brands {
-      id
-      name
-      slug
-      image
-    }
-  }
-`;
+import { GET_BRANDS } from "../utils/queries";
 
 function Home() {
   const { loading, error, data } = useQuery(GET_BRANDS);
 
   if (loading) {
-    return (
-      <Flex h='60vh' align='center' p='24' w='full' justify='center'>
-        <Box height='auto' width='10%' mx='0'>
-          <ReactLoading
-            type='spokes'
-            color='black'
-            height='100%'
-            width='100%'
-          />
-        </Box>
-      </Flex>
-    );
+    return <Loader />;
   }
   if (error) {
     console.error(error);
@@ -83,8 +60,8 @@ function Home() {
             fontSize={{ base: "md", sm: "lg" }}
             _hover={{ color: "white", background: "black" }}
           >
-            <Link to='/men'>Shop Men </Link>
-          </Button>{" "}
+            <Link to='/male'>Shop Male </Link>
+          </Button>
           <Button
             px={{ base: "5", sm: "10" }}
             lineHeight='none'
@@ -97,7 +74,7 @@ function Home() {
             fontSize={{ base: "md", sm: "lg" }}
             _hover={{ color: "white", background: "black" }}
           >
-            <Link to='/women'>Shop Women</Link>
+            <Link to='/female'>Shop Female</Link>
           </Button>
         </Flex>
       </BaseContainer>

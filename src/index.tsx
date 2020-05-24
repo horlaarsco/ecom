@@ -9,7 +9,9 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost";
 
 const client = new ApolloClient({
-  uri: "https://horla-ecom.herokuapp.com/",
+  // uri: "https://horla-ecom.herokuapp.com/",
+
+  uri: process.env.REACT_APP_APOLLO,
 });
 
 ReactDOM.render(

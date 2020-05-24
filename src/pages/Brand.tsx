@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { BaseContainer, ProductCard, Loader, EmptyPage } from "../components";
 import { useQuery } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
-import ReactLoading from "react-loading";
 
 import {
   SimpleGrid,
@@ -14,27 +12,7 @@ import {
   Button,
   Flex,
 } from "@chakra-ui/core";
-import { Product } from ".";
-
-// @ts-ignore
-
-const GET_BRAND = gql`
-  query getBrand($slug: String!) {
-    brand(slug: $slug) {
-      id
-      name
-      slug
-      image
-      products {
-        name
-        price
-        slug
-        images
-        salePrice
-      }
-    }
-  }
-`;
+import { GET_BRAND } from "../utils/queries";
 
 export default function Brand() {
   let { slug } = useParams();
@@ -82,6 +60,7 @@ export default function Brand() {
               <ProductCard
                 key={product.slug}
                 name={product.name}
+                brandName={data.brand.name}
                 brand={slug}
                 price={product.price}
                 slug={product.slug}

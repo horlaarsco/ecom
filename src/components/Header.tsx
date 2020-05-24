@@ -5,7 +5,6 @@ import {
   Box,
   Divider,
   Text,
-  Image,
   Button,
   useToast,
 } from "@chakra-ui/core";
@@ -14,30 +13,11 @@ import { FiShoppingCart, FiLogOut } from "react-icons/fi";
 import { Link, useHistory } from "react-router-dom";
 
 import BaseContainer from "./BaseContainer";
-import { gql } from "apollo-boost";
 import { useMutation } from "@apollo/react-hooks";
 import { AuthContext } from "../App";
 import Toast from "./Toast";
 import CartSmallCard from "./CartSmallCard";
-
-const LOG_OUT = gql`
-  mutation Logout($type: ID) {
-    logout(id: $type) {
-      firstName
-      lastName
-      email
-      password
-      role
-      username
-      password
-      updatedAt
-      createdAt
-      verified
-      id
-      token
-    }
-  }
-`;
+import { LOG_OUT } from "../utils/queries";
 
 export default function Header() {
   const toast = useToast();
@@ -113,8 +93,8 @@ export default function Header() {
               borderColor='white'
             />
             <Box d={{ base: "none", md: "inline" }} as='span'>
-              <Link to='/men' fontWeight='bold'>
-                Men
+              <Link to='/male' fontWeight='bold'>
+                Male
               </Link>
             </Box>
             <Divider
@@ -125,8 +105,20 @@ export default function Header() {
               height='full'
             />
             <Box d={{ base: "none", md: "inline" }} as='span'>
-              <Link to='/women' fontWeight='bold'>
-                WoMen
+              <Link to='/female' fontWeight='bold'>
+                Female
+              </Link>
+            </Box>
+            <Divider
+              d={{ base: "none", md: "inline" }}
+              mx='6'
+              height='full'
+              orientation='vertical'
+              borderColor='white'
+            />
+            <Box d={{ base: "none", md: "inline" }} as='span'>
+              <Link to='/unisex' fontWeight='bold'>
+                Unisex
               </Link>
             </Box>
             <Divider

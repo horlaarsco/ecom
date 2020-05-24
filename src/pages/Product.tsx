@@ -24,27 +24,7 @@ import {
 } from "@chakra-ui/core";
 import { BaseContainer, ProductCard, Loader, EmptyPage } from "../components";
 import Toast from "../components/Toast";
-
-const GET_PRODUCT = gql`
-  query getProduct($slug: String!) {
-    product(slug: $slug) {
-      id
-      name
-      slug
-      brand {
-        name
-      }
-      images
-      sizes
-      price
-      quantity
-      salePrice
-      category
-      colors
-      description
-    }
-  }
-`;
+import { GET_PRODUCT } from "../utils/queries";
 
 export default function Product() {
   const toast = useToast();
@@ -171,30 +151,6 @@ export default function Product() {
         </Text>
       </BaseContainer>
       <Divider borderColor='black' my='10' />
-      <BaseContainer>
-        <Heading my='6' fontSize='xl'>
-          YOU MIGHT ALSO LIKE
-        </Heading>
-        {/* <Carousel
-          itemPadding={[0, 5]}
-          breakPoints={breakPointss}
-          disableArrowsOnEnd={false}
-        >
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-        </Carousel> */}
-      </BaseContainer>
     </Box>
   );
 }

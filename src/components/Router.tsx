@@ -45,11 +45,14 @@ export default function Router() {
       <Route path='/checkout'>
         <Checkout />
       </Route>
-      <Route path='/men'>
-        <Gender gender='Men' />
+      <Route path='/male'>
+        <Gender gender='Male' />
       </Route>
-      <Route path='/women'>
-        <Gender gender='Women' />
+      <Route path='/female'>
+        <Gender gender='Female' />
+      </Route>
+      <Route path='/unisex'>
+        <Gender gender='Unisex' />
       </Route>
       <Route path='/'>
         <Home />

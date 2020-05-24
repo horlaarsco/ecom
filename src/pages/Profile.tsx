@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import { BaseContainer, Signup, Login, Loader, EmptyPage } from "../components";
-import { gql } from "apollo-boost";
-import { useQuery } from "@apollo/react-hooks";
+import React, { useState, useContext } from "react";
+import { BaseContainer } from "../components";
 
 import {
   Box,
@@ -10,45 +8,17 @@ import {
   Tab,
   TabPanels,
   TabPanel,
-  Link,
   Heading,
+  Text,
 } from "@chakra-ui/core";
-import Edit from "../components/Edit";
-
-export const PROFILE = gql`
-  query($data: ID!) {
-    user(id: $data) {
-      firstName
-      lastName
-      email
-      password
-      role
-      username
-      password
-      updatedAt
-      createdAt
-      verified
-      id
-      token
-    }
-  }
-`;
+import { AuthContext } from "../App";
 
 export default function Profile() {
+  // @ts-ignore
+  const profileDetails = useContext(AuthContext).profile;
+
   const [tabIndex, setTabIndex] = useState(0);
   // @ts-ignore
-  const id = JSON.parse(localStorage.getItem("token")).id;
-
-  const { loading, error, data } = useQuery(PROFILE, {
-    variables: { data: id },
-  });
-
-  if (loading) {
-    return <Loader />;
-  }
-  if (error) {
-    return <EmptyPage />;
-  }
 
   return (
     <BaseContainer>
@@ -78,7 +48,7 @@ export default function Profile() {
             onClick={() => setTabIndex(1)}
             _focus={{ outline: 0 }}
           >
-            Edit Profile
+            Orders
           </Tab>
         </TabList>
 
@@ -90,20 +60,38 @@ export default function Profile() {
           my='4'
         >
           <TabPanel mt='4' w='full'>
-            <Heading fontSize='3xl'>FirstName: {data.user.firstName}</Heading>{" "}
+            <Heading fontSize='3xl'>
+              FirstName: {profileDetails.firstName}
+            </Heading>{" "}
             <Heading mt='4' fontSize='3xl'>
-              LastName: {data.user.lastName}
+              LastName: {profileDetails.lastName}
             </Heading>
             <Heading mt='4' fontSize='3xl'>
-              Username: {data.user.username}
+              Username: {profileDetails.username}
             </Heading>
             <Heading mt='4' fontSize='3xl'>
-              Email: {data.user.email}
+              Email: {profileDetails.email}
             </Heading>
           </TabPanel>
 
           <TabPanel w='full'>
-            <Edit />
+            {profileDetails.orders &&
+              profileDetails.orders.map((order: any, index: any) => {
+                return (
+                  <Box key={index} mt='3'>
+                    <Text>Order Number {index + 1}</Text>
+                    <Text>FirstName: {order.firstName}</Text>{" "}
+                    <Text>LastName: {order.lastName}</Text>
+                    <Text>Address: {order.address}</Text>
+                    <Text>Address: {order.address2}</Text>
+                    <Text>City: {order.city}</Text>
+                    <Text>Phone NUmber: {order.number}</Text>
+                    <Text>PostCode: {order.postCode}</Text>
+                  </Box>
+                );
+              })}
+
+            {/* {JSON.stringify(profileDetails)} */}
           </TabPanel>
         </TabPanels>
       </Tabs>

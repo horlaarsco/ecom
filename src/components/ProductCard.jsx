@@ -16,6 +16,8 @@ export default function ProductCard({
   image,
   // @ts-ignore
   salePrice,
+  // @ts-ignore
+  brandName,
 }) {
   return (
     <Box
@@ -36,7 +38,7 @@ export default function ProductCard({
         </Link>
         <Link to={`/brand/${brand}`}>
           <Text mt='2' fontSize='xs' textTransform='uppercase'>
-            {brand}
+            {brandName}
           </Text>
         </Link>
         <Text mt='2' fontSize='sm'>

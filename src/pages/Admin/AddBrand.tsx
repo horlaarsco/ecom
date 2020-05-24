@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { gql } from "apollo-boost";
 import { useMutation } from "@apollo/react-hooks";
 import {
   Heading,
@@ -14,28 +13,11 @@ import {
   Textarea,
   Input,
 } from "@chakra-ui/core";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useHistory,
-  Redirect,
-} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { BaseContainer } from "../../components";
-import { AuthContext } from "../../App";
-
-const ADD_BRAND = gql`
-  mutation($data: BrandInput) {
-    addBrand(input: $data) {
-      id
-      slug
-      description
-      name
-    }
-  }
-`;
+import { ADD_BRAND } from "../../utils/queries";
 
 export default function AddBrand() {
   let history = useHistory();

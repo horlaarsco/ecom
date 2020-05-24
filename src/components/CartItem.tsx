@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Flex,
-  Box,
-  IconButton,
-  Select,
-  Image,
-  Text,
-  Divider,
-} from "@chakra-ui/core";
+import { Flex, Box, IconButton, Image, Text, Divider } from "@chakra-ui/core";
 
 // @ts-ignore
 export default function CartItem({ name, price, image }) {
@@ -47,18 +39,6 @@ export default function CartItem({ name, price, image }) {
           <Text mt='3' mb='1'>
             {name}
           </Text>
-          {/* <Flex mt='3'>
-            <Select mr='2' size='sm' w='100px' px='2' placeholder='Color:'>
-              <option value='option1'>Option 1</option>
-              <option value='option2'>Option 2</option>
-              <option value='option3'>Option 3</option>
-            </Select>
-            <Select size='sm' w='100px' px='2' placeholder='Qty:'>
-              <option value='option1'>Option 1</option>
-              <option value='option2'>Option 2</option>
-              <option value='option3'>Option 3</option>
-            </Select>
-          </Flex> */}
         </Box>
       </Flex>
     </>

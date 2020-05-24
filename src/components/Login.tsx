@@ -46,7 +46,7 @@ export default function Login() {
         token: Newdata.data.loginUser.token,
       };
       localStorage.setItem("token", JSON.stringify(toSave));
-      LoggedInStatus.setLogged(true);
+      LoggedInStatus.setLoggedIn(true);
 
       history.push("/");
 
@@ -60,7 +60,7 @@ export default function Login() {
       } else {
         newError = "Fill all required fields";
       }
-      Toast(toast, "An error occurred.", "error", `${newError}`);
+      Toast(toast, "An error occurred.", "error", `${error}`);
     }
   };
 

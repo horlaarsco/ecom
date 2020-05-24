@@ -1,10 +1,29 @@
 import React from "react";
-import { BaseContainer, ProductCard } from "../components";
+import { BaseContainer, ProductCard, Loader, EmptyPage } from "../components";
 import { SimpleGrid, Heading, Text, Box, Button, Flex } from "@chakra-ui/core";
+import { useQuery } from "@apollo/react-hooks";
+import { GET_PRODUCTS } from "../utils/queries";
 
-// @ts-ignore
-export default function Gender(props) {
+export default function Gender(props: any) {
   const { gender } = props;
+  const { loading, error, data } = useQuery(GET_PRODUCTS);
+
+  if (loading) {
+    return <Loader />;
+  }
+  if (error) {
+    return <EmptyPage />;
+  }
+
+  // @ts-ignore
+  const result = data.products.filter((product) => {
+    return product.category.toLowerCase() === gender.toLowerCase();
+  });
+
+  if (result.length < 1) {
+    return <Loader />;
+  }
+
   return (
     <>
       <Box
@@ -28,21 +47,21 @@ export default function Gender(props) {
         </BaseContainer>
       </Box>
       <BaseContainer mt='6'>
-        <SimpleGrid columns={[2, 3, 4, 5]} spacing={5}>
-          {/* <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard /> <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard /> */}
+        <SimpleGrid columns={[2, 3, 4]} spacing={8}>
+          {result
+            .map((product: any, index: number) => (
+              <ProductCard
+                key={index}
+                name={product.name}
+                brand={product.brand.slug}
+                price={product.price}
+                slug={product.slug}
+                image={product.images[0]}
+                salePrice={product.salePrice}
+                brandName={product.brand.name}
+              />
+            ))
+            .reverse()}
         </SimpleGrid>
         <Flex justify='center'>
           <Button
