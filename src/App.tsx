@@ -53,6 +53,9 @@ function App() {
         setLoading(false);
         setLoggedIn(false);
       }
+    } else {
+      setLoading(false);
+      setLoggedIn(false);
     }
   };
   useEffect(() => {

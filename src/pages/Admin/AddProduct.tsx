@@ -141,6 +141,7 @@ export default function AddProduct() {
       salePrice: parseInt(values.salePrice),
       quantity: parseInt(values.quantity),
       colors,
+      sizes,
       // @ts-ignore
       owner: JSON.parse(localStorage.getItem("token")).id,
       images: urlimages,
@@ -246,7 +247,7 @@ export default function AddProduct() {
               <FormControl mt='3' mb='5'>
                 <FormLabel>Upload Images</FormLabel>
                 <>
-                  <Button mt='3' onClick={handleClick}>
+                  <Button d='block' mt='3' onClick={handleClick}>
                     Choose Image{" "}
                   </Button>
 

@@ -10,7 +10,6 @@ import ApolloClient from "apollo-boost";
 
 const client = new ApolloClient({
   // uri: "https://horla-ecom.herokuapp.com/",
-
   uri: process.env.REACT_APP_APOLLO,
 });
 

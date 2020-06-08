@@ -39,7 +39,7 @@ export default function Router() {
       <Route path='/product/:slug'>
         <Product />
       </Route>
-      <Route path='/brand/:slug'>
+      <Route path='/brand/:slug'> 
         <Brand />
       </Route>
       <Route path='/checkout'>

@@ -21,7 +21,7 @@ export default function Gender(props: any) {
   });
 
   if (result.length < 1) {
-    return <Loader />;
+    return <EmptyPage />;
   }
 
   return (

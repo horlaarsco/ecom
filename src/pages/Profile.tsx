@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { BaseContainer } from "../components";
+import { BaseContainer, CartItem } from "../components";
 
 import {
   Box,
@@ -10,6 +10,9 @@ import {
   TabPanel,
   Heading,
   Text,
+  Flex,
+  IconButton,
+  Image,
 } from "@chakra-ui/core";
 import { AuthContext } from "../App";
 
@@ -87,6 +90,36 @@ export default function Profile() {
                     <Text>City: {order.city}</Text>
                     <Text>Phone NUmber: {order.number}</Text>
                     <Text>PostCode: {order.postCode}</Text>
+                    {order.products.map((product: any, index: any) => {
+                      return (
+                        <Flex
+                          mt='2'
+                          p={{ base: 3, lg: 6 }}
+                          flexDirection={{ base: "column", sm: "row" }}
+                          bg='#f5f5f5'
+                          key={index}
+                          justify='space-between'
+                        >
+                          <Image
+                            w={{ base: "70px", sm: "100px", lg: "120px" }}
+                            src={product.images[0]}
+                          />
+                          <Box
+                            d='flex'
+                            flexDir='column'
+                            justifyContent='center'
+                            flex='1'
+                            ml={{ base: 0, sm: 3 }}
+                            fontSize={{ base: "sm", lg: "md" }}
+                          >
+                            <Text fontWeight='bold'>${product.salePrice} </Text>
+                            <Text mt='3' mb='1'>
+                              {product.name}
+                            </Text>
+                          </Box>
+                        </Flex>
+                      );
+                    })}
                   </Box>
                 );
               })}

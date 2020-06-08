@@ -128,6 +128,34 @@ export default function Header() {
               orientation='vertical'
               borderColor='white'
             />
+            {LoggedInStatus.isAdmin && (
+              <>
+                <Box d={{ base: "none", md: "inline" }} as='span'>
+                  <Link to='/admin/add-brand' fontWeight='bold'>
+                    Add Brand
+                  </Link>
+                </Box>
+                <Divider
+                  d={{ base: "none", md: "inline" }}
+                  mx='6'
+                  height='full'
+                  orientation='vertical'
+                  borderColor='white'
+                />{" "}
+                <Box d={{ base: "none", md: "inline" }} as='span'>
+                  <Link to='/admin/add-product' fontWeight='bold'>
+                    Add Products
+                  </Link>
+                </Box>
+                <Divider
+                  d={{ base: "none", md: "inline" }}
+                  mx='6'
+                  height='full'
+                  orientation='vertical'
+                  borderColor='white'
+                />
+              </>
+            )}
           </Flex>
           <Flex align='center'>
             <Link to='/auth'>

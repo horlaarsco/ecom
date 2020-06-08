@@ -7,6 +7,7 @@ import { BaseContainer, Brand, Loader } from "../components";
 import Carousel from "react-elastic-carousel";
 import EmptyPage from "../components/EmptyPage";
 import { GET_BRANDS } from "../utils/queries";
+import { AuthContext } from "../App";
 
 function Home() {
   const { loading, error, data } = useQuery(GET_BRANDS);

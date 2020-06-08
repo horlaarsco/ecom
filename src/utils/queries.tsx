@@ -56,13 +56,17 @@ export const CHECK_LOG_IN = gql`
       orders {
         firstName
         number
-        owner
         lastName
         address
         address2
         city
         number
         postCode
+        products {
+          name
+          salePrice
+          images
+        }
       }
     }
   }
@@ -172,7 +176,6 @@ export const ADD_ORDER = gql`
       id
       lastName
       number
-      owner
       lastName
       address
       address2
